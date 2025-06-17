@@ -18,7 +18,38 @@ class TrabajoScene extends Phaser.Scene {
   }
 
   create() {
-this.secuencia = this.generarSecuencia(4);
+this.registry.set('aburrimiento', 0);
+
+//fondo en blanco
+this.cameras.main.setBackgroundColor('#ffffff');
+
+this.aburrimientoTexto = this.add.text(600, 50, 'Aburrimiento: 0%', {
+  fontSize: '24px',
+  color: '#ff0000',
+  fontFamily: 'Arial'
+});
+
+// Evento que suma aburrimiento cada segundo
+this.time.addEvent({
+  delay: 1000,
+  callback: () => {
+    let valorActual = this.registry.get('aburrimiento');
+    valorActual = Phaser.Math.Clamp(valorActual + 1, 0, 100); // Máximo 100
+    this.registry.set('aburrimiento', valorActual);
+    this.aburrimientoTexto.setText(`Aburrimiento: ${valorActual}%`);
+
+    /* Opcional: acción cuando llega al 100%
+    if (valorActual >= 100) {
+      this.feedback.setText('¡Te aburriste!');
+      this.aceptandoInput = false;
+      // Acá podrías cambiar de escena, mostrar un jefe, etc.
+    }*/
+  },
+  loop: true
+});
+
+
+    this.secuencia = this.generarSecuencia(4);
     this.inputIndex = 0;
     this.imagenesFlechas = [];
 
@@ -34,14 +65,16 @@ this.secuencia = this.generarSecuencia(4);
 
     this.feedback = this.add.text(100, 350, '', {
       fontSize: '30px',
-      color: '#ffffff',
+//color negro
+      color: '#000000',
       fontFamily: 'Arial',
     });
 
     this.puntos = 0; // Inicializo puntos
   this.puntosTexto = this.add.text(100, 50, 'Puntos: 0', {
     fontSize: '24px',
-    color: '#ffff00',
+// color verde oscuro
+    color: '#006400',
     fontFamily: 'Arial',
   });
 
@@ -101,18 +134,26 @@ if (tiempoTotal > 3000) {
   return;
 }
 
-// Sumar puntos parciales según tiempo
+// Calcular puntos base según tiempo
 let puntosASumar = 50;
 if (tiempoTotal <= 1000) {
   puntosASumar = 200;
 } else if (tiempoTotal <= 2000) {
   puntosASumar = 100;
 }
-this.puntosParciales += puntosASumar;
+
+// Si hay multiplicador, acumula para más adelante
+if (this.multiplicador > 1) {
+  this.puntosParciales += puntosASumar;
+} else {
+  // Si no hay multiplicador, suma directo a los puntos
+  this.puntos += puntosASumar;
+  this.puntosTexto.setText(`Puntos: ${this.puntos}`);
+}
 
 this.secuenciasCorrectas++;
 
-// Ajustar multiplicador según secuencias correctas
+// Ajustar multiplicador
 if (this.secuenciasCorrectas === 2) this.multiplicador = 2;
 else if (this.secuenciasCorrectas === 4) this.multiplicador = 4;
 else if (this.secuenciasCorrectas === 6) this.multiplicador = 8;
@@ -125,8 +166,9 @@ if (this.multiplicador > 1) {
 this.feedback.setText('¡Correcto!');
 this.aceptandoInput = false;
 
-this.time.delayedCall(100, () => this.reiniciarMinijuego(true, 0)); // ahora pasás 0 porque los puntos reales se acumulan y se aplican al final
+this.time.delayedCall(100, () => this.reiniciarMinijuego(true));
 this.time.delayedCall(800, () => this.feedback.setText(''));
+
 }
       
 
@@ -140,40 +182,33 @@ this.time.delayedCall(800, () => this.feedback.setText(''));
     }
   }
 
-reiniciarMinijuego(gano, puntosASumar = 0) {
-  if (gano) {
-    this.puntos += puntosASumar;
-    this.puntosTexto.setText(`Puntos: ${this.puntos}`);
-  }
-
+reiniciarMinijuego(gano) {
   this.inputIndex = 0;
   this.secuencia = this.generarSecuencia(4);
-  this.imagenesFlechas.forEach((img, i) => {
-    const nuevaDir = this.secuencia[i];
-    img.setTexture(nuevaDir);
-  });
+this.imagenesFlechas.forEach((img, i) => {
+  const nuevaDir = this.secuencia[i];
+  img.setTexture(nuevaDir); // solo cambia la imagen, sin animar
+});
 
   if (this.limiteTiempo) {
-  this.limiteTiempo.remove(false);
+    this.limiteTiempo.remove(false);
+  }
+
+  this.aceptandoInput = true;
+  this.tiempoInicio = this.time.now;
+
+  if (this.multiplicador > 1) {
+    this.limiteTiempo = this.time.delayedCall(3000, () => {
+      if (this.inputIndex < this.secuencia.length) {
+        this.aplicarMultiplicadorFinal();
+        this.feedback.setText('¡Tardaste demasiado!');
+        this.aceptandoInput = false;
+        this.time.delayedCall(800, () => this.feedback.setText(''));
+        this.time.delayedCall(100, () => this.reiniciarMinijuego(true));
+      }
+    });
+  }
 }
-
-
-    this.aceptandoInput = true; // Volver a aceptar input cuando esté listo
-    this.tiempoInicio = this.time.now; // Reiniciar tiempo para la nueva secuencia
-
-    // Cortar combo automáticamente si no termina en 3 segundos
-if (this.multiplicador > 1) {
-  this.limiteTiempo = this.time.delayedCall(3000, () => {
-    if (this.inputIndex < this.secuencia.length) {
-      this.aplicarMultiplicadorFinal();
-      this.feedback.setText('¡Tardaste demasiado!');
-      this.aceptandoInput = false;
-      this.time.delayedCall(800, () => this.feedback.setText(''));
-      this.time.delayedCall(100, () => this.reiniciarMinijuego(true, 0));
-    }
-  });
-}
-  }  
 
   aplicarMultiplicadorFinal() {
   const puntosFinales = this.puntosParciales * this.multiplicador;
