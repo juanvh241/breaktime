@@ -18,12 +18,12 @@ class TrabajoScene extends Phaser.Scene {
   }
 
   create() {
-this.registry.set('aburrimiento', 0);
+this.aburrimiento = this.registry.get('aburrimiento') ?? 0;
 
 //fondo en blanco
 this.cameras.main.setBackgroundColor('#ffffff');
 
-this.aburrimientoTexto = this.add.text(600, 50, 'Aburrimiento: 0%', {
+this.aburrimientoTexto = this.add.text(600, 50, `Aburrimiento: ${this.aburrimiento}%`, {
   fontSize: '24px',
   color: '#ff0000',
   fontFamily: 'Arial'
@@ -95,6 +95,10 @@ this.multiplicadorTexto = this.add.text(300, 50, '', {
   fontFamily: 'Arial',
 });
 
+this.input.keyboard.on('keydown-T', () => {
+  this.scene.start('NaveScene');
+});
+
   }
 
   generarSecuencia(largo) {
@@ -155,8 +159,8 @@ this.secuenciasCorrectas++;
 
 // Ajustar multiplicador
 if (this.secuenciasCorrectas === 2) this.multiplicador = 2;
-else if (this.secuenciasCorrectas === 4) this.multiplicador = 4;
-else if (this.secuenciasCorrectas === 6) this.multiplicador = 8;
+else if (this.secuenciasCorrectas === 6) this.multiplicador = 4;
+else if (this.secuenciasCorrectas === 10) this.multiplicador = 6;
 
 // Mostrar multiplicador si corresponde
 if (this.multiplicador > 1) {
