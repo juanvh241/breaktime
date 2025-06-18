@@ -18,16 +18,19 @@ class TrabajoScene extends Phaser.Scene {
   }
 
   create() {
-this.aburrimiento = this.registry.get('aburrimiento') ?? 0;
+let valorInicial = Number(this.registry.get('aburrimiento'));
+this.aburrimiento = isNaN(valorInicial) ? 0 : valorInicial;
+this.registry.set('aburrimiento', this.aburrimiento);
+
 
 //fondo en blanco
 this.cameras.main.setBackgroundColor('#ffffff');
 
 this.aburrimientoTexto = this.add.text(600, 50, `Aburrimiento: ${this.aburrimiento}%`, {
-  fontSize: '24px',
-  color: '#ff0000',
-  fontFamily: 'Arial'
-});
+    fontSize: '24px',
+    color: '#ff0000',
+    fontFamily: 'Arial'
+  });
 
 // Evento que suma aburrimiento cada segundo
 this.time.addEvent({
@@ -65,15 +68,14 @@ this.time.addEvent({
 
     this.feedback = this.add.text(100, 350, '', {
       fontSize: '30px',
-//color negro
       color: '#000000',
       fontFamily: 'Arial',
     });
 
+      // puntos texto
     this.puntos = 0; // Inicializo puntos
   this.puntosTexto = this.add.text(100, 50, 'Puntos: 0', {
     fontSize: '24px',
-// color verde oscuro
     color: '#006400',
     fontFamily: 'Arial',
   });
@@ -94,6 +96,14 @@ this.multiplicadorTexto = this.add.text(300, 50, '', {
   color: '#00ff00',
   fontFamily: 'Arial',
 });
+
+// Texto para puntos parciales
+this.puntosParcialesTexto = this.add.text(100, 80, '', {
+  fontSize: '24px',
+  color: '#008080', // un color distinto, azul verdoso
+  fontFamily: 'Arial',
+});
+
 
 this.input.keyboard.on('keydown-T', () => {
   this.scene.start('NaveScene');
@@ -162,6 +172,13 @@ if (this.secuenciasCorrectas === 2) this.multiplicador = 2;
 else if (this.secuenciasCorrectas === 6) this.multiplicador = 4;
 else if (this.secuenciasCorrectas === 10) this.multiplicador = 6;
 
+if (this.multiplicador > 1) {
+  this.multiplicadorTexto.setText(`x${this.multiplicador}`);
+} else {
+  this.multiplicadorTexto.setText('');
+}
+
+
 // Mostrar multiplicador si corresponde
 if (this.multiplicador > 1) {
   this.multiplicadorTexto.setText(`x${this.multiplicador}`);
@@ -172,6 +189,17 @@ this.aceptandoInput = false;
 
 this.time.delayedCall(100, () => this.reiniciarMinijuego(true));
 this.time.delayedCall(800, () => this.feedback.setText(''));
+//puntos parciales
+if (this.multiplicador > 1) {
+  this.puntosParciales += puntosASumar;
+  this.puntosParcialesTexto.setText(`Acumulado: ${this.puntosParciales}`);
+} else {
+  this.puntos += puntosASumar;
+  this.puntosTexto.setText(`Puntos: ${this.puntos}`);
+
+  // Si no hay multiplicador activo, vaciamos el texto de acumulados
+  this.puntosParcialesTexto.setText('');
+}
 
 }
       
@@ -224,6 +252,8 @@ this.imagenesFlechas.forEach((img, i) => {
   this.puntosParciales = 0;
   this.multiplicador = 1;
   this.multiplicadorTexto.setText('');
+  this.puntosParcialesTexto.setText('');
+
 }
 
 }
