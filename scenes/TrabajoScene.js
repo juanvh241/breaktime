@@ -4,17 +4,10 @@ class TrabajoScene extends Phaser.Scene {
   }
 
   preload() {
-    // Cargar flechas normales
-    this.load.image('UP', 'public/assets/Trabajo/Flechas/up.png');
-    this.load.image('DOWN', 'public/assets/Trabajo/Flechas/down.png');
-    this.load.image('LEFT', 'public/assets/Trabajo/Flechas/left.png');
-    this.load.image('RIGHT', 'public/assets/Trabajo/Flechas/right.png');
-
-    // Cargar flechas verdes
-    this.load.image('g_UP', 'public/assets/Trabajo/Flechas/g_up.png');
-    this.load.image('g_DOWN', 'public/assets/Trabajo/Flechas/g_down.png');
-    this.load.image('g_LEFT', 'public/assets/Trabajo/Flechas/g_left.png');
-    this.load.image('g_RIGHT', 'public/assets/Trabajo/Flechas/g_right.png');
+    this.load.spritesheet('UP', 'public/assets/Trabajo/Flechas/sprite arriba/sprite arriba.png', { frameWidth: 110, frameHeight: 110 });
+    this.load.spritesheet('DOWN', 'public/assets/Trabajo/Flechas/sprite abajo/sprite abajo.png', { frameWidth: 110, frameHeight: 110 });
+    this.load.spritesheet('LEFT', 'public/assets/Trabajo/Flechas/sprite izq/sprite izq.png', { frameWidth: 110, frameHeight: 110 });
+    this.load.spritesheet('RIGHT', 'public/assets/Trabajo/Flechas/sprite derecha/sprite derecha.png', { frameWidth: 110, frameHeight: 110 });
   }
 
   create() {
@@ -28,7 +21,8 @@ this.secuencia = this.generarSecuencia(4);
 
     // Mostrar la secuencia como imágenes
     this.secuencia.forEach((dir, i) => {
-      const img = this.add.image(startX + i * spacing, startY, dir);
+      const img = this.add.sprite(startX + i * spacing, startY, dir);
+img.play(`${dir.toLowerCase()}_anim`);
       this.imagenesFlechas.push(img);
     });
 
@@ -50,6 +44,12 @@ this.secuencia = this.generarSecuencia(4);
      this.tiempoInicio = this.time.now; // Guardar tiempo inicial
 
     this.input.keyboard.on('keydown', this.handleInput, this);
+
+    // crear animaciones para las flechas
+    this.anims.create({ key: 'up_anim', frames: this.anims.generateFrameNumbers('UP', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
+    this.anims.create({ key: 'down_anim', frames: this.anims.generateFrameNumbers('DOWN', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
+    this.anims.create({ key: 'left_anim', frames: this.anims.generateFrameNumbers('LEFT', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
+    this.anims.create({ key: 'right_anim', frames: this.anims.generateFrameNumbers('RIGHT', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
 
     //MULTIPLICADOR variables y texto
     this.secuenciasCorrectas = 0;
@@ -82,7 +82,7 @@ const opciones = ['UP', 'DOWN', 'LEFT', 'RIGHT'];
     if (tecla === this.secuencia[this.inputIndex]) {
       // Cambiar sprite a su versión verde
       const imagen = this.imagenesFlechas[this.inputIndex];
-      imagen.setTexture(`g_${tecla}`);
+      imagen.play(`${tecla.toLowerCase()}_anim`);
 
       this.inputIndex++;
 //tiempo
@@ -150,7 +150,8 @@ reiniciarMinijuego(gano, puntosASumar = 0) {
   this.secuencia = this.generarSecuencia(4);
   this.imagenesFlechas.forEach((img, i) => {
     const nuevaDir = this.secuencia[i];
-    img.setTexture(nuevaDir);
+img.setTexture(nuevaDir);
+img.play(`${nuevaDir.toLowerCase()}_anim`);
   });
 
   if (this.limiteTiempo) {
