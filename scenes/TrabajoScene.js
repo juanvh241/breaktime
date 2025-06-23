@@ -4,16 +4,39 @@ class TrabajoScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet('UP', 'public/assets/Trabajo/Flechas/sprite arriba/sprite arriba.png', { frameWidth: 110, frameHeight: 110 });
-    this.load.spritesheet('DOWN', 'public/assets/Trabajo/Flechas/sprite abajo/sprite abajo.png', { frameWidth: 110, frameHeight: 110 });
-    this.load.spritesheet('LEFT', 'public/assets/Trabajo/Flechas/sprite izq/sprite izq.png', { frameWidth: 110, frameHeight: 110 });
-    this.load.spritesheet('RIGHT', 'public/assets/Trabajo/Flechas/sprite derecha/sprite derecha.png', { frameWidth: 110, frameHeight: 110 });
+    this.load.spritesheet('UP', 'public/assets/Trabajo/Flechas/sprite arriba/sprite arriba.png', { frameWidth: 172, frameHeight: 172 });
+    this.load.spritesheet('DOWN', 'public/assets/Trabajo/Flechas/sprite abajo/sprite abajo.png', { frameWidth: 172, frameHeight: 172 });
+    this.load.spritesheet('LEFT', 'public/assets/Trabajo/Flechas/sprite izq/sprite izq.png', { frameWidth: 172, frameHeight: 172 });
+    this.load.spritesheet('RIGHT', 'public/assets/Trabajo/Flechas/sprite derecha/sprite derecha.png', { frameWidth: 172, frameHeight: 172 });
+    
+    this.load.spritesheet('UP_VERDE', 'public/assets/Trabajo/Flechas/arriba verde/arriba verde.png', { frameWidth: 172, frameHeight: 172 });
+    this.load.spritesheet('DOWN_VERDE', 'public/assets/Trabajo/Flechas/abajo verde/abajo verde.png', { frameWidth: 172, frameHeight: 172 });
+    this.load.spritesheet('RIGHT_VERDE', 'public/assets/Trabajo/Flechas/derecha verde/derecha verde.png', { frameWidth: 172, frameHeight: 172 });
+    this.load.spritesheet('LEFT_VERDE', 'public/assets/Trabajo/Flechas/izquierda verde/izquierda verde.png', { frameWidth: 172, frameHeight: 172 });
+  
+    this.load.spritesheet('MONITOR', 'public/assets/monitor fondo.png', { frameWidth: 1280, frameHeight: 720 });
   }
 
   create() {
 let valorInicial = Number(this.registry.get('aburrimiento'));
 this.aburrimiento = isNaN(valorInicial) ? 0 : valorInicial;
 this.registry.set('aburrimiento', this.aburrimiento);
+
+    // crear animaciones para las flechas
+    this.anims.create({ key: 'up_anim', frames: this.anims.generateFrameNumbers('UP', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+    this.anims.create({ key: 'down_anim', frames: this.anims.generateFrameNumbers('DOWN', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+    this.anims.create({ key: 'left_anim', frames: this.anims.generateFrameNumbers('LEFT', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+    this.anims.create({ key: 'right_anim', frames: this.anims.generateFrameNumbers('RIGHT', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+
+    this.anims.create({ key: 'up_correcta', frames: this.anims.generateFrameNumbers('UP_VERDE', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+    this.anims.create({ key: 'down_correcta', frames: this.anims.generateFrameNumbers('DOWN_VERDE', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+    this.anims.create({ key: 'right_correcta', frames: this.anims.generateFrameNumbers('RIGHT_VERDE', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+    this.anims.create({ key: 'left_correcta', frames: this.anims.generateFrameNumbers('LEFT_VERDE', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
+
+    this.anims.create({ key: 'monitor_anim', frames: this.anims.generateFrameNumbers('MONITOR', { start: 0, end: 11 }), frameRate: 8, repeat: -1 });
+
+const monitor = this.add.sprite(640, 360, 'MONITOR');
+monitor.play('monitor_anim');
 
 
 //fondo en blanco
@@ -22,7 +45,7 @@ this.cameras.main.setBackgroundColor('#ffffff');
 this.aburrimientoTexto = this.add.text(600, 50, `Aburrimiento: ${this.aburrimiento}%`, {
     fontSize: '24px',
     color: '#ff0000',
-    fontFamily: 'Arial'
+    fontFamily: 'Gloria Hallelujah'
   });
 
 // Evento que suma aburrimiento cada segundo
@@ -55,8 +78,8 @@ this.time.addEvent({
 
     // Mostrar la secuencia como imágenes
     this.secuencia.forEach((dir, i) => {
-      const img = this.add.sprite(startX + i * spacing, startY, dir);
-img.play(`${dir.toLowerCase()}_anim`);
+      const img = this.add.sprite(startX + i * spacing, startY, dir) .setScale(0.7); // Acá escalás el sprite
+      img.play(`${dir.toLowerCase()}_anim`);
       this.imagenesFlechas.push(img);
     });
 
@@ -66,25 +89,22 @@ img.play(`${dir.toLowerCase()}_anim`);
       fontFamily: 'Arial',
     });
 
-      // puntos texto
-    this.puntos = 0; // Inicializo puntos
-  this.puntosTexto = this.add.text(100, 50, 'Puntos: 0', {
-    fontSize: '24px',
-    color: '#006400',
-    fontFamily: 'Arial',
-  });
+// obtener puntos del registro o inicializar en 0
+this.puntos = Number(this.registry.get('puntos')) || 0;
+
+  // puntos texto
+this.puntosTexto = this.add.text(100, 50, `Puntos: ${this.puntos}`, {
+      fontSize: '24px',
+      color: '#006400',
+      fontFamily: 'Arial',
+    });
+
 
      this.aceptandoInput = true;  // <--- Inicializar acá
 
      this.tiempoInicio = this.time.now; // Guardar tiempo inicial
 
     this.input.keyboard.on('keydown', this.handleInput, this);
-
-    // crear animaciones para las flechas
-    this.anims.create({ key: 'up_anim', frames: this.anims.generateFrameNumbers('UP', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
-    this.anims.create({ key: 'down_anim', frames: this.anims.generateFrameNumbers('DOWN', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
-    this.anims.create({ key: 'left_anim', frames: this.anims.generateFrameNumbers('LEFT', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
-    this.anims.create({ key: 'right_anim', frames: this.anims.generateFrameNumbers('RIGHT', { start: 0, end: 13 }), frameRate: 10, repeat: 1 });
 
     //MULTIPLICADOR variables y texto
     this.secuenciasCorrectas = 0;
@@ -105,8 +125,9 @@ this.puntosParcialesTexto = this.add.text(100, 80, '', {
 });
 
 
-this.input.keyboard.on('keydown-T', () => {
-  this.scene.start('NaveScene');
+this.input.keyboard.on('keydown-X', () => {
+   this.registry.set('puntos', this.puntos);
+  this.scene.start('MenuScene');
 });
 
   }
@@ -129,7 +150,7 @@ const opciones = ['UP', 'DOWN', 'LEFT', 'RIGHT'];
     if (tecla === this.secuencia[this.inputIndex]) {
       // Cambiar sprite a su versión verde
       const imagen = this.imagenesFlechas[this.inputIndex];
-      imagen.play(`${tecla.toLowerCase()}_anim`);
+      imagen.play(`${tecla.toLowerCase()}_correcta`);
 
       this.inputIndex++;
 //tiempo

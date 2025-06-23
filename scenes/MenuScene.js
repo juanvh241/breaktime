@@ -1,0 +1,89 @@
+class MenuScene extends Phaser.Scene {
+  constructor() {
+    super('MenuScene');
+  }
+
+  preload() {
+    this.load.image('monitorFondo', 'public/assets/MenuIntermedio/MonitorFondo.png');
+    this.load.image('iconoTrabajo', 'public/assets/MenuIntermedio/IconoTrabajo.png');
+    this.load.image('iconoNave', 'public/assets/MenuIntermedio/IconoNave.png');
+  }
+
+  create() {
+    this.add.image(640, 350, 'monitorFondo');
+
+    // Mostrar puntos y aburrimiento actuales
+    const puntos = this.registry.get('puntos') ?? 0;
+    const aburrimiento = this.registry.get('aburrimiento') ?? 0;
+
+    this.add.text(20, 20, `Puntos: ${puntos}`, {
+      fontSize: '24px',
+      fill: '#006400',
+      fontFamily: 'Arial',
+    });
+
+    this.add.text(20, 50, `Aburrimiento: ${aburrimiento}%`, {
+      fontSize: '24px',
+      fill: '#ff0000',
+        fontFamily: 'Arial',
+    });
+
+    // Iconos de minijuegos
+    this.iconos = [
+      {
+        key: 'iconoTrabajo',
+        x: 450,
+        y: 300,
+        escena: 'TrabajoScene'
+      },
+      {
+        key: 'iconoNave',
+        x: 750,
+        y: 300,
+        escena: 'NaveScene'
+      }
+    ];
+
+    this.iconosSprites = this.iconos.map(icono => this.add.image(icono.x, icono.y, icono.key));
+
+    // Indicador de selección
+    this.indicador = this.add.rectangle(this.iconos[0].x, this.iconos[0].y + 80, 100, 10, 0x00ff00);
+    this.seleccionActual = 0;
+
+    // Input de flechas y selección
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.teclaZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+
+    this.inputCooldown = 0; // evitar repetir input por frame
+  }
+
+  update(time, delta) {
+    this.inputCooldown -= delta;
+
+    if (this.inputCooldown <= 0) {
+      if (this.cursors.left.isDown) {
+        this.seleccionActual = (this.seleccionActual - 1 + this.iconos.length) % this.iconos.length;
+        this.actualizarIndicador();
+        this.inputCooldown = 200;
+      }
+
+      if (this.cursors.right.isDown) {
+        this.seleccionActual = (this.seleccionActual + 1) % this.iconos.length;
+        this.actualizarIndicador();
+        this.inputCooldown = 200;
+      }
+
+      if (Phaser.Input.Keyboard.JustDown(this.teclaZ)) {
+        const seleccion = this.iconos[this.seleccionActual];
+        this.scene.start(seleccion.escena);
+      }
+    }
+  }
+
+  actualizarIndicador() {
+    this.indicador.x = this.iconos[this.seleccionActual].x;
+    this.indicador.y = this.iconos[this.seleccionActual].y + 80;
+  }
+}
+
+export default MenuScene;
