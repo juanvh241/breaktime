@@ -138,7 +138,7 @@ this.puntosTexto = this.add.text(600, 50, `Puntos: ${this.puntos}`, {
     if (Phaser.Input.Keyboard.JustDown(this.teclaX)) {
       this.registry.set('aburrimiento', this.aburrimiento);
          this.registry.set('puntos', this.puntos);
-      this.scene.start('MenuScene');
+      this.scene.launch('MenuScene');
     }
     this.enemigos.getChildren().forEach(enemigo => {
     enemigo.body.x = enemigo.x + this.enemigosContainer.x - enemigo.width / 2;

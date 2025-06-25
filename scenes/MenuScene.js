@@ -10,9 +10,9 @@ class MenuScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(640, 350, 'monitorFondo');
+    //this.add.image(640, 350, 'monitorFondo');
 
-    // Mostrar puntos y aburrimiento actuales
+    /* Mostrar puntos y aburrimiento actuales
     const puntos = this.registry.get('puntos') ?? 0;
     const aburrimiento = this.registry.get('aburrimiento') ?? 0;
 
@@ -26,7 +26,7 @@ class MenuScene extends Phaser.Scene {
       fontSize: '24px',
       fill: '#ff0000',
         fontFamily: 'Arial',
-    });
+    });*/
 
     // Iconos de minijuegos
     this.iconos = [
@@ -75,7 +75,8 @@ class MenuScene extends Phaser.Scene {
 
       if (Phaser.Input.Keyboard.JustDown(this.teclaZ)) {
         const seleccion = this.iconos[this.seleccionActual];
-        this.scene.start(seleccion.escena);
+        this.scene.stop();
+        this.scene.launch(seleccion.escena);
       }
     }
   }
