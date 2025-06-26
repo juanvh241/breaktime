@@ -38,11 +38,12 @@ class TrabajoScene extends Phaser.Scene {
     this.anims.create({ key: 'right_correcta', frames: this.anims.generateFrameNumbers('RIGHT_VERDE', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
     this.anims.create({ key: 'left_correcta', frames: this.anims.generateFrameNumbers('LEFT_VERDE', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
 
-    // Variables de juego
-    this.puntos = 0;
-    this.puntosParciales = 0;
-    this.secuenciasCorrectas = 0;
-    this.multiplicador = 1;
+    // Recuperar estado actual del cerebro
+    this.puntos = this.cerebro.estado.puntos || 0;
+    this.puntosParciales = this.cerebro.estado.puntosParciales || 0;
+    this.secuenciasCorrectas = this.cerebro.estado.secuenciasCorrectas || 0;
+    this.multiplicador = this.cerebro.estado.multiplicador || 1;
+
 
     // Generar secuencia inicial de flechas
     this.secuencia = this.generarSecuencia(4);
@@ -66,14 +67,6 @@ class TrabajoScene extends Phaser.Scene {
       fontFamily: 'Arial',
     });
 
-    // Subida automática de aburrimiento
-    this.time.addEvent({
-      delay: 1000,
-      callback: () => {
-        this.cerebro.events.emit('subirAburrimiento', 1);
-      },
-      loop: true
-    });
 
     // Configurar inputs
     this.aceptandoInput = true;
@@ -82,10 +75,32 @@ class TrabajoScene extends Phaser.Scene {
     this.input.keyboard.on('keydown', this.handleInput, this);
 
     this.input.keyboard.on('keydown-X', () => {
+        if (this.jefePresente) return;
+         this.registry.set('ultimoMinijuego', 'TrabajoScene');
       this.cerebro.events.emit('actualizarPuntos', this.puntos);
       this.scene.stop();
       this.scene.launch('MenuScene');
     });
+
+this.jefePresente = false;
+
+this.events.on('jefeObserva', () => {
+  this.jefePresente = true;
+
+  const textoJefe = this.add.text(400, 100, '¡El jefe te está observando!', {
+    fontSize: '28px',
+    color: '#ffffff',
+    backgroundColor: '#aa0000',
+    fontFamily: 'Arial'
+  }).setOrigin(0.5);
+
+  this.time.delayedCall(3000, () => {
+    textoJefe.destroy();
+    this.jefePresente = false;
+  });
+});
+
+
   }
 
   // ─────────────────────────────────────
@@ -113,16 +128,19 @@ class TrabajoScene extends Phaser.Scene {
         const tiempoFin = this.time.now;
         const tiempoTotal = tiempoFin - this.tiempoInicio;
 
-        if (tiempoTotal > 3000) {
-          this.aplicarMultiplicadorFinal();
-          this.feedback.setText('¡Tardaste demasiado!');
-          this.aceptandoInput = false;
-          this.time.delayedCall(800, () => {
-            this.feedback.setText('');
-            this.reiniciarMinijuego(true);
-          });
-          return;
-        }
+      if (this.multiplicador > 1 && tiempoTotal > 3000) {          
+        this.aplicarMultiplicadorFinal(); // Corta el combo
+        this.feedback.setText('¡Tardaste demasiado!');
+        this.aceptandoInput = false;
+
+        this.time.delayedCall(800, () => {
+          this.feedback.setText('');
+          this.aceptandoInput = true; // Reactivamos el input sin reiniciar la secuencia
+          this.tiempoInicio = this.time.now; // Reinicia el tiempo para la misma secuencia
+        });
+
+        return;
+      }
 
         // Calcular puntos según tiempo
         let puntosASumar = 50;
@@ -142,6 +160,7 @@ class TrabajoScene extends Phaser.Scene {
         if (this.secuenciasCorrectas === 2) this.multiplicador = 2;
         else if (this.secuenciasCorrectas === 6) this.multiplicador = 4;
         else if (this.secuenciasCorrectas === 10) this.multiplicador = 6;
+        else if (this.secuenciasCorrectas === 20) this.multiplicador = 10;
 
         this.cerebro.events.emit('actualizarMultiplicador', {
           multiplicador: this.multiplicador,
@@ -154,7 +173,7 @@ class TrabajoScene extends Phaser.Scene {
         this.time.delayedCall(800, () => this.feedback.setText(''));
       }
     } else {
-      // ✴️ Si se equivoca: aplicar castigo y esperar 800ms antes de reiniciar
+      // Si se equivoca: aplicar castigo y esperar 800ms antes de reiniciar
       this.aplicarMultiplicadorFinal();
       this.aceptandoInput = false;
       this.feedback.setText('¡Error!');
@@ -181,20 +200,21 @@ class TrabajoScene extends Phaser.Scene {
     this.aceptandoInput = true;
     this.tiempoInicio = this.time.now;
 
-    if (this.multiplicador > 1) {
-      this.limiteTiempo = this.time.delayedCall(3000, () => {
-        if (this.inputIndex < this.secuencia.length) {
-          this.aplicarMultiplicadorFinal();
-          this.feedback.setText('¡Tardaste demasiado!');
-          this.aceptandoInput = false;
-          this.time.delayedCall(800, () => {
-            this.feedback.setText('');
-            this.reiniciarMinijuego(true);
-          });
-        }
+if (this.multiplicador > 1) {
+  this.limiteTiempo = this.time.delayedCall(3000, () => {
+    if (this.inputIndex < this.secuencia.length) {
+      this.aplicarMultiplicadorFinal();
+      this.feedback.setText('¡Tardaste demasiado!');
+      this.aceptandoInput = false;
+      this.tiempoInicio = this.time.now; // reinicia tiempo pero no secuencia
+      this.time.delayedCall(800, () => {
+        this.feedback.setText('');
+        this.aceptandoInput = true;
       });
     }
-  }
+  });
+}}
+
 
   // ─────────────────────────────────────
   // Aplicar multiplicador final y reiniciar combo

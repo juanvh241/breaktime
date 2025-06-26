@@ -8,27 +8,17 @@ class NaveScene extends Phaser.Scene {
   }
 
 create() {
+  this.cerebro = this.scene.get('CerebroScene');
+
+  
   // variables del cooldown del disparo
   this.ultimoDisparo = 0;
-  this.cooldownDisparo = 800; // milisegundos
+  this.cooldownDisparo = 600; // milisegundos
 
 
   // Obtener aburrimiento y puntos
-  this.aburrimiento = this.registry.get('aburrimiento') ?? 0;
-  this.puntos = Number(this.registry.get('puntos')) || 0;
-
-  // Texto del aburrimiento
-  this.aburrimientoTexto = this.add.text(20, 20, `Aburrimiento: ${this.aburrimiento}`, {
-    fontSize: '20px',
-    fill: '#ffffff',
-  });
-
-// texto de puntos
-this.puntosTexto = this.add.text(600, 50, `Puntos: ${this.puntos}`, {
-  fontSize: '24px',
-  color: '#006400',
-  fontFamily: 'Arial',
-});
+  this.aburrimiento = this.cerebro.estado.aburrimiento || 0;
+  this.puntos = this.cerebro.estado.puntos || 0;
 
 
   // Nave
@@ -80,6 +70,24 @@ this.puntosTexto = this.add.text(600, 50, `Puntos: ${this.puntos}`, {
   this.cursors = this.input.keyboard.createCursorKeys();
   this.teclaZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
   this.teclaX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+
+  this.events.on('jefeDetecta', () => {
+  const textoGameOver = this.add.text(400, 300, '¡El jefe te encontró jugando!\nPerdiste.', {
+    fontSize: '32px',
+    color: '#ffffff',
+    backgroundColor: '#000000',
+    align: 'center',
+    fontFamily: 'Arial'
+  }).setOrigin(0.5);
+
+  this.physics.pause();
+  this.input.keyboard.enabled = false;
+
+  this.time.delayedCall(3000, () => {
+    this.scene.start('TrabajoScene'); // o podés crear una escena "GameOver"
+  });
+});
+
 }
 
 
@@ -109,10 +117,8 @@ this.puntosTexto = this.add.text(600, 50, `Puntos: ${this.puntos}`, {
     bala.destroy();
     enemigo.destroy();
 
-    // Reducir aburrimiento
-    this.aburrimiento = Math.max(0, this.aburrimiento - 10);
-    this.registry.set('aburrimiento', this.aburrimiento);
-    this.aburrimientoTexto.setText(`Aburrimiento: ${this.aburrimiento}`);
+    const cerebro = this.scene.get('CerebroScene');
+    cerebro.events.emit('subirAburrimiento', -cerebro.aburrimientoNave);
   }
 
   update() {
@@ -134,12 +140,14 @@ this.puntosTexto = this.add.text(600, 50, `Puntos: ${this.puntos}`, {
   }
 }
 
-    // Volver a la escena de trabajo con T
+    // ir a menu con X
     if (Phaser.Input.Keyboard.JustDown(this.teclaX)) {
-      this.registry.set('aburrimiento', this.aburrimiento);
-         this.registry.set('puntos', this.puntos);
+       this.registry.set('ultimoMinijuego', 'NaveScene');
+      this.cerebro.estado.puntos = this.puntos;
+      this.scene.stop();
       this.scene.launch('MenuScene');
     }
+
     this.enemigos.getChildren().forEach(enemigo => {
     enemigo.body.x = enemigo.x + this.enemigosContainer.x - enemigo.width / 2;
     enemigo.body.y = enemigo.y + this.enemigosContainer.y - enemigo.height / 2;

@@ -55,30 +55,56 @@ class MenuScene extends Phaser.Scene {
     this.teclaZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 
     this.inputCooldown = 0; // evitar repetir input por frame
+
+this.events.on('jefeObserva', () => {
+  const textoJefe = this.add.text(400, 100, '¡El jefe te está observando!', {
+    fontSize: '28px',
+    color: '#ffffff',
+    backgroundColor: '#aa0000',
+    fontFamily: 'Arial'
+  }).setOrigin(0.5);
+
+  this.input.keyboard.enabled = false;
+
+  this.time.delayedCall(3000, () => {
+    textoJefe.destroy();
+    this.input.keyboard.enabled = true;
+  });
+});
+
+const ultima = this.registry.get('ultimoMinijuego');
+if (ultima === 'NaveScene') {
+  this.seleccionActual = 1;
+  this.actualizarIndicador();
+} else {
+  this.seleccionActual = 0;
+  this.actualizarIndicador();
+}
+
   }
 
   update(time, delta) {
     this.inputCooldown -= delta;
 
-    if (this.inputCooldown <= 0) {
-      if (this.cursors.left.isDown) {
-        this.seleccionActual = (this.seleccionActual - 1 + this.iconos.length) % this.iconos.length;
-        this.actualizarIndicador();
-        this.inputCooldown = 200;
-      }
+if (this.cursors.left.isDown && this.seleccionActual > 0) {
+  this.seleccionActual--;
+  this.actualizarIndicador();
+  this.inputCooldown = 200;
+}
 
-      if (this.cursors.right.isDown) {
-        this.seleccionActual = (this.seleccionActual + 1) % this.iconos.length;
-        this.actualizarIndicador();
-        this.inputCooldown = 200;
-      }
+if (this.cursors.right.isDown && this.seleccionActual < this.iconos.length - 1) {
+  this.seleccionActual++;
+  this.actualizarIndicador();
+  this.inputCooldown = 200;
+}
 
-      if (Phaser.Input.Keyboard.JustDown(this.teclaZ)) {
-        const seleccion = this.iconos[this.seleccionActual];
-        this.scene.stop();
-        this.scene.launch(seleccion.escena);
-      }
-    }
+if (Phaser.Input.Keyboard.JustDown(this.teclaZ)) {
+  const seleccion = this.iconos[this.seleccionActual];
+  this.registry.set('ultimoMinijuego', seleccion.escena); // ← muy importante para que recuerde la selección
+  this.scene.stop();
+  this.scene.launch(seleccion.escena);
+}
+
   }
 
   actualizarIndicador() {
