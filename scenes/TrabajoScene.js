@@ -158,9 +158,8 @@ this.events.on('jefeObserva', () => {
         // Ajustar multiplicador
         this.secuenciasCorrectas++;
         if (this.secuenciasCorrectas === 2) this.multiplicador = 2;
-        else if (this.secuenciasCorrectas === 6) this.multiplicador = 4;
-        else if (this.secuenciasCorrectas === 10) this.multiplicador = 6;
-        else if (this.secuenciasCorrectas === 20) this.multiplicador = 10;
+        else if (this.secuenciasCorrectas === 4) this.multiplicador = 4;
+        else if (this.secuenciasCorrectas === 8) this.multiplicador = 6;
 
         this.cerebro.events.emit('actualizarMultiplicador', {
           multiplicador: this.multiplicador,

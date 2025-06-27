@@ -10,8 +10,76 @@ constructor() {
   };
     this.jefeActivo = false; // ← NUEVO: control de aparición
 }
+
+preload() {
+  this.load.spritesheet('MESA_IZQ', 'public/assets/Cerebro/mesa izquierda.png', { frameWidth: 195, frameHeight: 195 });
+  this.load.spritesheet('MESA_MEDIO', 'public/assets/Cerebro/mesa medio.png', { frameWidth: 218, frameHeight: 218 });  // ajustá el ancho si es distinto
+  this.load.spritesheet('MESA_DER', 'public/assets/Cerebro/mesa derecha.png', { frameWidth: 194, frameHeight: 194 }); // suponiendo que es igual a izquierda
+
+  this.load.spritesheet('MONITOR1', 'public/assets/Cerebro/monitor1.png', { frameWidth: 410, frameHeight: 410 });
+  this.load.spritesheet('MONITOR2', 'public/assets/Cerebro/monitor2.png', { frameWidth: 410, frameHeight: 410 });
+}
+
+
 // ─────────────────────────────────────
   create() {
+        // rectangulo blanco mediano
+    this.add.rectangle(640, 600, 1280, 300, 0xffffff).setOrigin(0.5) .setDepth(-5);
+
+    // creo todas las animaciones
+  this.anims.create({ key: 'mesa_izq_anim', frames: this.anims.generateFrameNumbers('MESA_IZQ', { start: 0, end: 16 }), frameRate: 6, repeat: -1 });
+  this.anims.create({ key: 'mesa_medio_anim', frames: this.anims.generateFrameNumbers('MESA_MEDIO', { start: 0, end: 5 }), frameRate: 6, repeat: -1 });
+  this.anims.create({ key: 'mesa_der_anim', frames: this.anims.generateFrameNumbers('MESA_DER', { start: 0, end: 18 }), frameRate: 6, repeat: -1 });
+
+ // const yMesa = 600;
+
+// Izquierda
+this.add.sprite(265, 630, 'MESA_IZQ')
+    .play('mesa_izq_anim').setDepth(-4)
+    .setScale(1.5); // Escala del 150%
+
+
+// Medio
+this.add.sprite(540, 612, 'MESA_MEDIO')
+  .play('mesa_medio_anim')
+  .setDepth(-4)
+  .setScale(1.5); // Escala del 150%
+
+this.add.sprite(730, 612, 'MESA_MEDIO')
+  .play('mesa_medio_anim')
+  .setDepth(-4)
+  .setScale(1.5);
+
+
+
+  // Derecha
+this.add.sprite(1005, 630, 'MESA_DER')
+    .play('mesa_der_anim')
+    .setScale(1.5) // Escala del 150%
+
+// ─────────────────────────────────────    
+    
+    // animacion del monitor
+const framesParte1 = this.anims.generateFrameNumbers('MONITOR1', { start: 0, end: 17 }); // X = cantidad - 1
+const framesParte2 = this.anims.generateFrameNumbers('MONITOR2', { start: 0, end: 11 }); // Y = cantidad - 1
+
+this.anims.create({
+  key: 'monitor_anim',
+  frames: [...framesParte1, ...framesParte2],
+  frameRate: 15,
+  repeat: -1
+});
+
+const monitor = this.add.sprite(640, 400, 'MONITOR1') // poné la posición que quieras
+  .play('monitor_anim')
+  .setDepth(-3); // Ajustá según cómo lo quieras apilar
+
+// Podés escalarlo si queda chico
+monitor.setScale(1.5); // O el valor que veas mejor
+    // ─────────────────────────────────────
+  
+
+        
     this.aburrimientoTrabajo = 2;
     this.aburrimientoMenu = 1;
     this.aburrimientoNave = 2; // valor para restar (negativo)
@@ -171,7 +239,7 @@ else if (nombreEscena === 'NaveScene') {
     });
   });
 }
-
+// swimnub_pk <-- fan de breaktime
 }
 
 export default CerebroScene;
