@@ -17,7 +17,12 @@ class TrabajoScene extends Phaser.Scene {
     this.load.spritesheet('RIGHT_VERDE', 'public/assets/Trabajo/Flechas/derecha verde/derecha verde.png', { frameWidth: 172, frameHeight: 172 });
     this.load.spritesheet('LEFT_VERDE', 'public/assets/Trabajo/Flechas/izquierda verde/izquierda verde.png', { frameWidth: 172, frameHeight: 172 });
 
-    this.load.spritesheet('MONITOR', 'public/assets/monitor fondo.png', { frameWidth: 1280, frameHeight: 720 });
+      
+    this.load.image('BarraDeTareas', 'public/assets/Escritorio/barra de tareas.png');
+  
+    this.load.spritesheet('BORDE_TRABAJO', 'public/assets/Escritorio/borde ventana trabajo.png', { frameWidth: 541, frameHeight: 72 });
+  
+    this.load.spritesheet('VENTANA_ERROR', 'public/assets/Trabajo/ventana error.png', { frameWidth: 354, frameHeight: 129 });
   }
 
   // ─────────────────────────────────────
@@ -26,6 +31,35 @@ class TrabajoScene extends Phaser.Scene {
   create() {
     // Referencia a CerebroScene
     this.cerebro = this.scene.get('CerebroScene');
+    //escritorio
+    this.add.rectangle(640, 360, 1280, 720, 0x008080).setAlpha(1);
+
+const graphics = this.add.graphics();
+
+    // borde de la ventana animacion
+    this.anims.create({
+      key: 'borde_trabajo_anim',
+      frames: this.anims.generateFrameNumbers('BORDE_TRABAJO', { start: 0, end: 29 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    // borde de la ventana
+    const bordeTrabajo = this.add.sprite(640, 120, 'BORDE_TRABAJO').setScale(0.92, 0.98);
+    bordeTrabajo.play('borde_trabajo_anim');
+    bordeTrabajo.setOrigin(0.5, 0.5);
+
+// ── Contorno gris claro (fondo más grande)
+graphics.fillStyle(0xC0C0C0, 1); // Gris claro típico de Win98
+graphics.fillRoundedRect(400, 110, 480, 325, 10); // Un poco más grande que el rectángulo blanco
+
+// ── Rectángulo blanco encima
+graphics.fillStyle(0xffffff, 1);
+graphics.fillRoundedRect(405, 115, 470, 315, 8); // El rectángulo original, levemente más chico
+
+this.add.image(640, 468, 'BarraDeTareas').setOrigin(0.5).setScale(0.88, 1);
+
+
 
     // Animaciones de flechas y monitor
     this.anims.create({ key: 'up_anim', frames: this.anims.generateFrameNumbers('UP', { start: 0, end: 25 }), frameRate: 15, repeat: -1 });
@@ -51,11 +85,11 @@ class TrabajoScene extends Phaser.Scene {
     this.imagenesFlechas = [];
 
     // Mostrar secuencia de flechas en pantalla
-    const startX = 400;
-    const startY = 300;
-    const spacing = 150;
+    const startX = 500;
+    const startY = 280;
+    const spacing = 90;
     this.secuencia.forEach((dir, i) => {
-      const img = this.add.sprite(startX + i * spacing, startY, dir).setScale(0.7);
+      const img = this.add.sprite(startX + i * spacing, startY, dir).setScale(0.5);
       img.play(`${dir.toLowerCase()}_anim`);
       this.imagenesFlechas.push(img);
     });
@@ -98,6 +132,21 @@ this.events.on('jefeObserva', () => {
     textoJefe.destroy();
     this.jefePresente = false;
   });
+});
+
+// ─────────────────────────────────────
+//feedback sprite de ventana error
+this.feedbackSprite = this.add.sprite(640, 280, 'VENTANA_ERROR');
+this.feedbackSprite.setVisible(false);
+this.feedbackSprite.setScale(1);
+this.feedbackSprite.setDepth(10); // por si querés que esté arriba de todo
+
+//animacion del feedback sprite
+this.anims.create({
+  key: 'error_anim',
+  frames: this.anims.generateFrameNumbers('VENTANA_ERROR', { start: 0, end: 29 }),
+  frameRate: 10,
+  repeat: -1
 });
 
 
@@ -172,14 +221,19 @@ this.events.on('jefeObserva', () => {
         this.time.delayedCall(800, () => this.feedback.setText(''));
       }
     } else {
-      // Si se equivoca: aplicar castigo y esperar 800ms antes de reiniciar
-      this.aplicarMultiplicadorFinal();
-      this.aceptandoInput = false;
-      this.feedback.setText('¡Error!');
-      this.time.delayedCall(800, () => {
-        this.feedback.setText('');
-        this.reiniciarMinijuego(false);
-      });
+    // Si se equivoca: aplicar castigo y esperar 800ms antes de reiniciar
+    this.aplicarMultiplicadorFinal();
+    this.aceptandoInput = false;
+
+    // Mostrar sprite animado de error
+    this.feedbackSprite.setVisible(true);
+    this.feedbackSprite.play('error_anim');
+
+    // Esperar y reiniciar
+    this.time.delayedCall(800, () => {
+      this.feedbackSprite.setVisible(false);
+      this.reiniciarMinijuego(false);      
+    });
     }
   }
 

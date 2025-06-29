@@ -7,45 +7,57 @@ class MenuScene extends Phaser.Scene {
     this.load.image('monitorFondo', 'public/assets/MenuIntermedio/MonitorFondo.png');
     this.load.image('iconoTrabajo', 'public/assets/MenuIntermedio/IconoTrabajo.png');
     this.load.image('iconoNave', 'public/assets/MenuIntermedio/IconoNave.png');
+  
+    this.load.image('BarraDeTareas' , 'public/assets/Escritorio/barra de tareas.png');
+  
+    this.load.spritesheet('ICONO_TRABAJO', 'public/assets/Escritorio/icono trabajo.png', { frameWidth: 185, frameHeight: 185 });
+    this.load.spritesheet('ICONO_NAVE', 'public/assets/Escritorio/icono nave.png', { frameWidth: 180, frameHeight: 180 });
   }
 
   create() {
-    //this.add.image(640, 350, 'monitorFondo');
+this.add.rectangle(640, 360, 1280, 720, 0x008080).setAlpha(1);
 
-    /* Mostrar puntos y aburrimiento actuales
-    const puntos = this.registry.get('puntos') ?? 0;
-    const aburrimiento = this.registry.get('aburrimiento') ?? 0;
+this.add.image(640, 468, 'BarraDeTareas').setOrigin(0.5).setScale(0.88, 1);
 
-    this.add.text(20, 20, `Puntos: ${puntos}`, {
-      fontSize: '24px',
-      fill: '#006400',
-      fontFamily: 'Arial',
+    //crear animaciones de los iconos
+    this.anims.create({
+      key: 'icono_trabajo_anim',
+      frames: this.anims.generateFrameNumbers('ICONO_TRABAJO', { start: 0, end: 14 }),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'icono_nave_anim',
+      frames: this.anims.generateFrameNumbers('ICONO_NAVE', { start: 0, end: 14 }),
+      frameRate: 10,
+      repeat: -1
     });
 
-    this.add.text(20, 50, `Aburrimiento: ${aburrimiento}%`, {
-      fontSize: '24px',
-      fill: '#ff0000',
-        fontFamily: 'Arial',
-    });*/
-
-    // Iconos de minijuegos
+// Iconos de minijuegos
     this.iconos = [
       {
-        key: 'iconoTrabajo',
-        x: 450,
-        y: 300,
-        escena: 'TrabajoScene'
+        key: 'ICONO_TRABAJO',
+        x: 530,
+        y: 280,
+        escena: 'TrabajoScene',
+        anim: 'icono_trabajo_anim',
+        offsetIndicador: 90
       },
       {
-        key: 'iconoNave',
+        key: 'ICONO_NAVE',
         x: 750,
-        y: 300,
-        escena: 'NaveScene'
+        y: 275,
+        escena: 'NaveScene',
+        anim: 'icono_nave_anim',
+        offsetIndicador: 95
       }
     ];
 
-    this.iconosSprites = this.iconos.map(icono => this.add.image(icono.x, icono.y, icono.key));
-
+// Crear sprites con animaciones
+this.iconosSprites = this.iconos.map(icono => {
+  return this.add.sprite(icono.x, icono.y, icono.key)
+             .play(icono.anim);
+});
     // Indicador de selección
     this.indicador = this.add.rectangle(this.iconos[0].x, this.iconos[0].y + 80, 100, 10, 0x00ff00);
     this.seleccionActual = 0;
@@ -81,6 +93,7 @@ if (ultima === 'NaveScene') {
   this.actualizarIndicador();
 }
 
+
   }
 
   update(time, delta) {
@@ -107,10 +120,10 @@ if (Phaser.Input.Keyboard.JustDown(this.teclaZ)) {
 
   }
 
-  actualizarIndicador() {
-    this.indicador.x = this.iconos[this.seleccionActual].x;
-    this.indicador.y = this.iconos[this.seleccionActual].y + 80;
-  }
+actualizarIndicador() {
+  const icono = this.iconos[this.seleccionActual];
+  this.indicador.setPosition(icono.x, icono.y + icono.offsetIndicador);
+}
 }
 
 export default MenuScene;
