@@ -6,7 +6,7 @@ constructor() {
     multiplicador: 1,
     puntosParciales: 0,
     aburrimiento: 0,
-    secuenciasCorrectas: 0
+
   };
     this.jefeActivo = false; // ← NUEVO: control de aparición
 }
@@ -65,6 +65,41 @@ preload() {
 }
 // ─────────────────────────────────────
   create() {
+
+   /* this.estado = {
+    puntos: 0,
+    multiplicador: 1,
+    puntosParciales: 0,
+    aburrimiento: 0,
+    secuenciasCorrectas: 0
+  };
+
+   // Reiniciar valores específicos de aburrimiento en escenas
+  this.aburrimientoTrabajo = 0;
+  this.aburrimientoMenu = 0;
+  this.aburrimientoNave = 0;
+
+  this.jefeActivo = false;
+  this.mostrandoInstrucciones = false;
+  this.derrotaMostrada = false;
+*/
+  // Si existe el grupo de textos de instrucciones de antes, eliminarlo
+  if (this.textosInstrucciones) {
+    this.textosInstrucciones.forEach(t => t.destroy());
+    this.textosInstrucciones = [];
+  }
+
+  // Igual con la tabla
+  if (this.TablaSprite) {
+    this.TablaSprite.destroy();
+    this.TablaSprite = null;
+  }
+
+  // Igual con fondo negro si quedó de antes
+  if (this.fondoInstrucciones) {
+    this.fondoInstrucciones.destroy();
+    this.fondoInstrucciones = null;
+  }
     
         // rectangulo blanco mediano
    //this.add.rectangle(640, 400, 1280, 700, 0xffffff).setOrigin(0.5) .setDepth(-4);
@@ -596,6 +631,8 @@ this.mostrandoInstrucciones = false;
   }
 
 mostrarInstrucciones() {
+  if (this.textosInstrucciones && this.textosInstrucciones.length > 0) return;
+
  this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
     .setDepth(10);
   this.TablaSprite.setVisible(true);
@@ -697,15 +734,21 @@ mostrarInstrucciones() {
 
 
 
-  iniciarSubidaDeAburrimientoConElTiempo() {
-  this.time.addEvent({
+iniciarSubidaDeAburrimientoConElTiempo() {
+   console.log(' iniciarSubidaDeAburrimientoConElTiempo fue llamada');
+  if (this.aburrimientoEvent) {
+    this.aburrimientoEvent.remove();
+    this.aburrimientoEvent = null;
+  }
+
+  this.aburrimientoEvent = this.time.addEvent({
     delay: 20000,
     loop: true,
     callback: () => {
       this.aburrimientoTrabajo++;
       this.aburrimientoMenu++;
       this.aburrimientoNave++;
-      console.log(`Ahora aburrimiento: Trabajo=${this.aburrimientoTrabajo}, Menu=${this.aburrimientoMenu}, Nave=-${this.aburrimientoNave}`);
+      console.log(`Aburrimiento → Trabajo: ${this.aburrimientoTrabajo}, Menu: ${this.aburrimientoMenu}, Nave: ${this.aburrimientoNave}`);
     }
   });
 }
@@ -789,6 +832,26 @@ if (nombreEscena === 'TrabajoScene') {
   };
 // swimnub_pk <-- fan de breaktime
 
+resetearEstadoInicial() {
+  this.estado = {
+    puntos: 0,
+    multiplicador: 1,
+    puntosParciales: 0,
+    aburrimiento: 0,
+    secuenciasCorrectas: 0
+  };
+
+  // Reiniciar valores específicos de aburrimiento en escenas
+  this.aburrimientoTrabajo = 0;
+  this.aburrimientoMenu = 0;
+  this.aburrimientoNave = 0;
+
+  // Reiniciar flags de estados
+  this.jefeActivo = false;
+  this.derrotaMostrada = false;
+  this.mostrandoInstrucciones = false;
+}
+
 mostrarPantallaDerrota() {
   // 1. Frenar escenas activas
   this.scene.stop('TrabajoScene');
@@ -837,33 +900,52 @@ mostrarPantallaDerrota() {
   );
 
   // 4. Escuchar una sola vez la tecla Z
-this.input.keyboard.once('keydown-Z', () => {
-  // Frenar cualquier escena activa
+this.input.keyboard.once('keydown-X', () => {
+  // Detenemos todas las escenas posibles
   this.scene.stop('TrabajoScene');
   this.scene.stop('MenuScene');
+  this.scene.stop('MenuPrincipalScene');
   this.scene.stop('NaveScene');
 
-  // Reiniciar CerebroScene por completo
-  this.scene.restart();
+this.aburrimientoTrabajo = 0;
+this.aburrimientoMenu = 0;
+this.aburrimientoNave = 0;
+
+if (this.aburrimientoEvent) {
+  this.aburrimientoEvent.remove();
+  this.aburrimientoEvent = null;
+}
+  // Reiniciamos la escena principal desde 0
+  this.scene.stop('CerebroScene');
+  this.scene.start('CerebroScene'); // ← Vuelve a cargar todo como al inicio
 });
 }
 
 
 ocultarInstruccionesYEmpezar() {
-  //this.fondoOscuro.setVisible(false);
-  this.TablaSprite.setVisible(false);
-  this.textosInstrucciones.forEach(texto => texto.destroy());
-this.fondoInstrucciones.destroy();
-this.TablaSprite.setVisible(false);
-
+  this.ocultarHUD(false);
   this.mostrandoInstrucciones = false;
 
-  // Ahora sí arrancamos el juego
-  this.ocultarHUD(false);
+  this.textosInstrucciones.forEach(texto => texto.destroy());
+  this.textosInstrucciones = [];
+  this.fondoInstrucciones.destroy();
+  this.TablaSprite.setVisible(false);
+
+  // Reiniciar aburrimiento antes de empezar
+
+  if (this.aburrimientoEvent) {
+    this.aburrimientoEvent.remove();
+    this.aburrimientoEvent = null;
+  }
+
+  // Lanzar escenas
   this.scene.stop('MenuPrincipalScene');
   this.scene.launch('MenuScene');
-  this.iniciarTemporizadorJefe();
+
+  // Iniciar evento solo acá
   this.iniciarSubidaDeAburrimientoConElTiempo();
+
+  this.iniciarTemporizadorJefe();
 }
 
 
