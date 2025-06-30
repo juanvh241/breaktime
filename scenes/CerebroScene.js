@@ -98,14 +98,6 @@ this.ultimoMultiplicador = 1;
     secuenciasCorrectas: 0
   };
 
-   // Reiniciar valores específicos de aburrimiento en escenas
-  this.aburrimientoTrabajo = 0;
-  this.aburrimientoMenu = 0;
-  this.aburrimientoNave = 0;
-
-  this.jefeActivo = false;
-  this.mostrandoInstrucciones = false;
-  this.derrotaMostrada = false;
 */
 //------------------------------------------
 if (this.musicaFondo) this.musicaFondo.stop();
@@ -375,20 +367,7 @@ this.emoji = this.add.sprite(1230, 60, 'EMOJI')
 
     // ────────────────────────────────
     
-    this.aburrimientoTrabajo = 2;
-    this.aburrimientoMenu = 1;
-    this.aburrimientoNave = 2; // valor para restar (negativo)
 
-    /*this.time.addEvent({
-  delay: 20000,
-  loop: true,
-  callback: () => {
-    this.aburrimientoTrabajo++;
-    this.aburrimientoMenu++;
-    this.aburrimientoNave++; // esto también lo usás como -x en NaveScene
-    console.log(`Ahora aburrimiento: Trabajo=${this.aburrimientoTrabajo}, Menu=${this.aburrimientoMenu}, Nave=-${this.aburrimientoNave}`);
-  }
-});*/
 
     // Textos de UI
     this.puntosTexto = this.add.text(120, 45, `${this.estado.puntos}`, {
@@ -496,8 +475,12 @@ if (this.estado.aburrimiento < 40) {
 
    if (this.estado.aburrimiento >= 100) {
     this.mostrarPantallaDerrota();
+        console.log('se manda la derrota')
+
   }
 });
+
+
     // Siempre encima de todo
     this.scene.bringToTop();
 
@@ -534,6 +517,11 @@ this.jefeTexto = this.add.text(400, 200, '', {
   backgroundColor: '#000',
   padding: { x: 10, y: 5 }
 }).setOrigin(0.5).setDepth(10);
+
+
+this.aburrimientoTrabajo = 2;
+this.aburrimientoMenu = 1;
+this.aburrimientoNave = 2;
 
 /*this.time.addEvent({
   delay: Phaser.Math.Between(8000, 30000), // cada 8 a 30 segundos
@@ -796,7 +784,7 @@ iniciarSubidaDeAburrimientoConElTiempo() {
   }
 
   this.aburrimientoEvent = this.time.addEvent({
-    delay: 20000,
+    delay: 5000,
     loop: true,
     callback: () => {
       this.aburrimientoTrabajo++;
@@ -902,10 +890,6 @@ resetearEstadoInicial() {
     secuenciasCorrectas: 0
   };
 
-  // Reiniciar valores específicos de aburrimiento en escenas
-  this.aburrimientoTrabajo = 0;
-  this.aburrimientoMenu = 0;
-  this.aburrimientoNave = 0;
 
   // Reiniciar flags de estados
   this.jefeActivo = false;
@@ -969,9 +953,7 @@ this.input.keyboard.once('keydown-X', () => {
   this.scene.stop('MenuPrincipalScene');
   this.scene.stop('NaveScene');
 
-this.aburrimientoTrabajo = 0;
-this.aburrimientoMenu = 0;
-this.aburrimientoNave = 0;
+this.resetearEstadoInicial();
 
 // Reiniciamos la escena principal desde 0
   this.scene.stop('CerebroScene');
@@ -1008,28 +990,21 @@ this.musicaFondo.play();
   this.scene.stop('MenuPrincipalScene');
   this.scene.launch('MenuScene');
   
-this.aburrimientoTrabajo = 0;
-this.aburrimientoMenu = 0;
-this.aburrimientoNave = 0;
 this.estado.aburrimiento = 0;
 this.estado.puntos = 0;
 
+
+
+//this.actualizarBarraAburrimiento(); // ← que la barra refleje 0
 this.aburrimientoTrabajo = 2;
 this.aburrimientoMenu = 1;
 this.aburrimientoNave = 2;
 
 
-//this.actualizarBarraAburrimiento(); // ← que la barra refleje 0
-
-/* Inmediatamente forzamos una subida para que la barra "reviva"
-this.aburrimientoTrabajo++;
-this.aburrimientoMenu++;
-this.aburrimientoNave++;
-*/
-
 //this.actualizarBarraAburrimiento(); // ← ahora sí se va a ver una barra mínima
 
 // Recién después, el evento automático
+
 this.iniciarSubidaDeAburrimientoConElTiempo();
 
   this.iniciarTemporizadorJefe();
