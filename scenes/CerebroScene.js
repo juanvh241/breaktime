@@ -47,9 +47,22 @@ preload() {
 
   this.load.spritesheet('MARCO_ABURRIMIENTO', 'public/assets/Cerebro/barra aburrimiento.png', { frameWidth: 319, frameHeight: 89 });
   this.load.spritesheet('EMOJI', 'public/assets/Cerebro/emoji.png', { frameWidth: 159, frameHeight: 150 });
+
+  this.load.spritesheet('JEFE_VENTANA', 'public/assets/Cerebro/jefe ventana.png', { frameWidth: 132, frameHeight: 135 });
+  this.load.spritesheet('JEFE_MESA', 'public/assets/Cerebro/jefe mesa.png', { frameWidth: 200, frameHeight: 191 })
+  this.load.spritesheet('JEFE_NOTI', 'public/assets/Cerebro/jefe noti.png', { frameWidth: 274, frameHeight: 120 })
+
+  this.load.spritesheet('JEFE1', 'public/assets/Cerebro/jefe 1.png', { frameWidth: 403, frameHeight: 438 })
+    this.load.spritesheet('JEFE2', 'public/assets/Cerebro/jefe 2.png', { frameWidth: 403, frameHeight: 438 })
+      this.load.spritesheet('JEFE3', 'public/assets/Cerebro/jefe 3.png', { frameWidth: 403, frameHeight: 438 })
+        this.load.spritesheet('JEFE4', 'public/assets/Cerebro/jefe 4.png', { frameWidth: 403, frameHeight: 438 })
+          this.load.spritesheet('JEFE5', 'public/assets/Cerebro/jefe 5.png', { frameWidth: 403, frameHeight: 438 })
+ 
+  this.load.spritesheet('TABLA1', 'public/assets/Cerebro/tabla 1.png', { frameWidth: 371, frameHeight: 480 })
+   this.load.spritesheet('TABLA2', 'public/assets/Cerebro/tabla 2.png', { frameWidth: 371, frameHeight: 480 })
+  this.load.spritesheet('TABLA3', 'public/assets/Cerebro/tabla 3.png', { frameWidth: 371, frameHeight: 480 })
+ 
 }
-
-
 // ─────────────────────────────────────
   create() {
     
@@ -66,30 +79,29 @@ preload() {
 // Izquierda
 this.add.sprite(265, 630, 'MESA_IZQ')
     .play('mesa_izq_anim').setDepth(-4)
-    .setScale(1.5); // Escala del 150%
-
-
+    .setScale(1.5) // Escala del 150%
+    .setDepth(2);
 // Medio
 this.add.sprite(540, 612, 'MESA_MEDIO')
   .play('mesa_medio_anim')
   .setDepth(-4)
-  .setScale(1.5); // Escala del 150%
+  .setScale(1.5) // Escala del 150%
+      .setDepth(2);
 
 this.add.sprite(730, 612, 'MESA_MEDIO')
   .play('mesa_medio_anim')
   .setDepth(-4)
-  .setScale(1.5);
-
-
+  .setScale(1.5)
+      .setDepth(2);
 
   // Derecha
 this.add.sprite(1005, 630, 'MESA_DER')
     .play('mesa_der_anim')
     .setDepth(-4)
     .setScale(1.5) // Escala del 150%
+        .setDepth(2);
 
-    // ─────────────────────────────────────
-    
+  
     // ─────────────────────────────────────
   // animación del suelo
 const framesSuelo1 = this.anims.generateFrameNumbers('SUELO1', { start: 0, end: 5 });
@@ -213,8 +225,8 @@ this.anims.create({
 });
 
 // signo pesos
-const signoPesos = this.add.sprite(65, 60, 'SIGNO_PESOS').play('signo_pesos_anim');
-signoPesos.setScale(0.65, 0.4); // Escala del 50%
+this.signoPesos = this.add.sprite(65, 60, 'SIGNO_PESOS').play('signo_pesos_anim');
+this.signoPesos.setScale(0.65, 0.4); // Escala del 50%
 
 // ────────────────────────────────
 // creo animaciones de multiplicador
@@ -255,28 +267,42 @@ this.anims.create({
   repeat: -1
 });
 // marco de aburrimiento
-this.marcoAburrimiento = this.add.sprite(640, 50, 'MARCO_ABURRIMIENTO')
+this.marcoAburrimiento = this.add.sprite(1090, 70, 'MARCO_ABURRIMIENTO')
   .play('marco_aburrimiento_anim')
-  .setScale(1)
+  .setScale(0.6, 0.7)
   .setDepth(5);
 
-// La barra inicia a la derecha, y se acorta desde la izquierda
-this.barraAburrimientoMax = 200; // ancho máximo de la barra
-this.barraAburrimientoX = 740; // posición fija del borde derecho
+// Barra alineada con el marco en (1090, 60)
+this.barraAburrimientoMax = 162; // largo total de la barra
+this.barraAburrimientoX = 1172;  // borde derecho fijo (igual que el marco)
 
 this.barraAburrimiento = this.add.rectangle(
-  this.barraAburrimientoX, 50,
-  this.barraAburrimientoMax, 20,
-  0x00ff00
+  this.barraAburrimientoX, 70,   // misma Y que el marco
+  this.barraAburrimientoMax, 20, // largo inicial y alto
+  0x00ff00                       // color inicial (verde)
 ).setOrigin(1, 0.5).setDepth(4);
-// ────────────────────────────────
 
+// ────────────────────────────────
+// creo animación del emoji
+const framesEmoji = this.anims.generateFrameNumbers('EMOJI', { start: 0, end: 29 });
+this.anims.create({
+  key: 'emoji_anim',
+  frames: framesEmoji,
+  frameRate: 10,
+  repeat: -1
+});
+// emoji
+this.emoji = this.add.sprite(1230, 60, 'EMOJI')
+  .play('emoji_anim')
+  .setScale(0.5) // ajustá la escala si hace falta  
+
+    // ────────────────────────────────
     
     this.aburrimientoTrabajo = 2;
     this.aburrimientoMenu = 1;
     this.aburrimientoNave = 2; // valor para restar (negativo)
 
-    this.time.addEvent({
+    /*this.time.addEvent({
   delay: 20000,
   loop: true,
   callback: () => {
@@ -285,7 +311,7 @@ this.barraAburrimiento = this.add.rectangle(
     this.aburrimientoNave++; // esto también lo usás como -x en NaveScene
     console.log(`Ahora aburrimiento: Trabajo=${this.aburrimientoTrabajo}, Menu=${this.aburrimientoMenu}, Nave=-${this.aburrimientoNave}`);
   }
-});
+});*/
 
     // Textos de UI
     this.puntosTexto = this.add.text(120, 45, `${this.estado.puntos}`, {
@@ -309,11 +335,11 @@ this.barraAburrimiento = this.add.rectangle(
       fontStyle: 'bold'
     }).setOrigin(1, 0.5);  // ← anclado a la derecha;
 
-    this.aburrimientoTexto = this.add.text(600, 50, `Aburrimiento: ${this.estado.aburrimiento}%`, {
+    /*this.aburrimientoTexto = this.add.text(600, 50, `Aburrimiento: ${this.estado.aburrimiento}%`, {
       fontSize: '24px',
       color: '#ff0000',
       fontFamily: 'Arial'
-    });
+    });*/
 
     // ────────────────────────────────
     // Escuchar eventos desde otras escenas
@@ -363,35 +389,51 @@ this.events.on('actualizarMultiplicador', ({ multiplicador, puntosParciales, sec
 this.events.on('subirAburrimiento', (cantidad) => {
   this.estado.aburrimiento = Phaser.Math.Clamp(this.estado.aburrimiento + cantidad, 0, 100);
 
-  const porcentaje = 1 - (this.estado.aburrimiento / 100);
-  const nuevoAncho = this.barraAburrimientoMax * porcentaje;
+const porcentaje = 1 - (this.estado.aburrimiento / 100);
+const nuevoAncho = this.barraAburrimientoMax * porcentaje;
 
-  this.barraAburrimiento.width = nuevoAncho;
-  this.barraAburrimiento.x = this.barraAburrimientoX; // → mantenemos el borde derecho fijo
+this.barraAburrimiento.setSize(nuevoAncho, 20);  // ← actualizá tamaño físico
+this.barraAburrimiento.displayWidth = nuevoAncho; // ← actualizá visualmente
+this.barraAburrimiento.x = this.barraAburrimientoX; // ← borde derecho fijo
 
-  // Color según porcentaje
-  if (this.estado.aburrimiento < 40) {
-    this.barraAburrimiento.fillColor = 0x00ff00; // verde
-  } else if (this.estado.aburrimiento < 75) {
-    this.barraAburrimiento.fillColor = 0xffff00; // amarillo
-  } else {
-    this.barraAburrimiento.fillColor = 0xff0000; // rojo
-  }
-  
+// Color dinámico
+if (this.estado.aburrimiento < 40) {
+  this.barraAburrimiento.fillColor = 0x00ff00; // verde
+} else if (this.estado.aburrimiento < 75) {
+  this.barraAburrimiento.fillColor = 0xffff00; // amarillo
+} else {
+  this.barraAburrimiento.fillColor = 0xff0000; // rojo
+}
+
    if (this.estado.aburrimiento >= 100) {
-    // Mostrar mensaje y perder
-    const mensaje = this.add.text(640, 360, '¡Te aburriste demasiado!\nPerdiste.', {
-      fontSize: '32px',
-      color: '#ffffff',
-      backgroundColor: '#000000',
-      fontFamily: 'Arial',
-      align: 'center'
-    }).setOrigin(0.5);
+    this.mostrarPantallaDerrota();
   }
 });
     // Siempre encima de todo
     this.scene.bringToTop();
-    this.scene.launch('MenuScene');
+
+    // AGRUPACION DE ELEMENTOS DE LA HUD
+    // HUD agrupada para poder ocultarla
+  this.hudElements = this.add.group([
+    this.contenedor,
+    this.puntosTexto,
+    this.multiplicadorTexto,
+    this.puntosParcialesTexto,
+    this.spriteMultiplicador,
+    this.marcoAburrimiento,
+    this.barraAburrimiento,
+    this.emoji,
+    this.signoPesos
+  ]);
+
+  // LANZO ESCENA MENUPRINCIPAL
+  // LANZO EL MENÚ PRINCIPAL AL INICIO
+this.scene.launch('MenuPrincipalScene'); // ← la escena del menú inicial
+this.ocultarHUD(true);
+
+this.scene.get('MenuPrincipalScene').events.on('empezarJuego', () => {
+  this.mostrarInstrucciones();
+});
 
 // ───────────────────────────────
 // Jefe: aviso y aparición periódica
@@ -404,7 +446,7 @@ this.jefeTexto = this.add.text(400, 200, '', {
   padding: { x: 10, y: 5 }
 }).setOrigin(0.5).setDepth(10);
 
-this.time.addEvent({
+/*this.time.addEvent({
   delay: Phaser.Math.Between(8000, 30000), // cada 8 a 30 segundos
  callback: () => {
     if (!this.jefeActivo) {
@@ -412,8 +454,7 @@ this.time.addEvent({
     }
   },
     loop: true // ← IMPORTANTE
-});
-
+});*/
 // Subida dinámica de aburrimiento según escena activa
 this.time.addEvent({
   delay: 1500,
@@ -450,8 +491,6 @@ mascara.invertAlpha = true;
 this.children.each(child => {
   child.setMask(mascara);
 });
-
-
 // ───────────────────────────────
 //MONITOR SIEMPRE A LO ULTIMO
     // animacion del monitor
@@ -467,48 +506,372 @@ this.anims.create({
 
 const monitor = this.add.sprite(650, 350, 'MONITOR1') // poné la posición que quieras
   .play('monitor_anim')
-  .setDepth(-2); // Ajustá según cómo lo quieras apilar
+  .setDepth(3); // Ajustá según cómo lo quieras apilar
   // Podés escalarlo si queda chico
 monitor.setScale(1.75, 1.75); // O el valor que veas mejor
 
 // ───────────────────────────────
+              //JEFE ANIMACIONES
+      this.anims.create({
+    key: 'aviso_jefe_anim',
+    frames: this.anims.generateFrameNumbers('JEFE_VENTANA', { start: 0, end: 36 }), // N = cantidad de cuadros - 1
+    frameRate: 14,
+    repeat: 0
+  });
+
+  this.avisoJefeSprite = this.add.sprite(240, 225, 'JEFE_VENTANA')
+    .setOrigin(0.5)
+    .setVisible(false)
+    .setScale(1.7)
+    .setDepth(10); // asegurate que esté encima de todo
+  
+  
+      this.anims.create({
+    key: 'jefe_mesa_anim',
+    frames: this.anims.generateFrameNumbers('JEFE_MESA', { start: 0, end: 36 }), // N = cantidad de cuadros - 1
+    frameRate: 14,
+    repeat: 0
+  });
+
+  this.avisoJefeMesa = this.add.sprite(1085, 360, 'JEFE_MESA')
+  .setOrigin(0.5)
+  .setVisible(false)
+  .setScale(1)
+  .play('jefe_mesa_anim')
+
+      this.anims.create({
+    key: 'jefe_noti_anim',
+    frames: this.anims.generateFrameNumbers('JEFE_NOTI', { start: 0, end: 28 }), // N = cantidad de cuadros - 1
+    frameRate: 12,
+    repeat: 0
+  });
+
+  this.avisoJefeNoti = this.add.sprite(790, 390, 'JEFE_NOTI')
+  .setOrigin(0.5)
+  .setVisible(false)
+  .setScale(0.9)
+  .play('jefe_noti_anim');
+
+    const framesJefe1 = this.anims.generateFrameNumbers('JEFE1', { start: 0, end: 7 });
+const framesJefe2 = this.anims.generateFrameNumbers('JEFE2', { start: 0, end: 7 });
+const framesJefe3 = this.anims.generateFrameNumbers('JEFE3', { start: 0, end: 7 });
+const framesJefe4 = this.anims.generateFrameNumbers('JEFE4', { start: 0, end: 7 });
+ const framesJefe5 = this.anims.generateFrameNumbers('JEFE5', { start: 0, end: 7 });
+
+    this.anims.create({
+    key: 'jefe_anim',
+    frames: [...framesJefe1, ...framesJefe2, ...framesJefe3, ...framesJefe4, ...framesJefe5],
+    frameRate: 12,
+    repeat: 0
+     });
+
+  this.JefeViendo = this.add.sprite(190, 400, 'JEFE')
+  .setOrigin(0.5)
+  .setVisible(false)
+  .setScale(1.6)
+  .setDepth(1);
+
+  // ------------------------
+         const framesTabla1 = this.anims.generateFrameNumbers('TABLA1', { start: 0, end: 9 });
+const framesTabla2 = this.anims.generateFrameNumbers('TABLA2', { start: 0, end: 9 });
+const framesTabla3 = this.anims.generateFrameNumbers('TABLA3', { start: 0, end: 9 });
+
+    this.anims.create({
+    key: 'tabla_anim',
+    frames: [...framesTabla1, ...framesTabla2, ...framesTabla3],
+    frameRate: 12,
+    repeat: -1
+     });
+
+  this.TablaSprite = this.add.sprite(640, 360, 'TABLA1') // centro pantalla
+  .setOrigin(0.5)
+  .setScale(1.6)
+  .setVisible(false)
+  .setDepth(20) // bien arriba
+  .play('tabla_anim');
+//-------------------------------------------------------------
+// --------------------------------------------------------------------
+  // Flag de estado
+this.mostrandoInstrucciones = false;
   }
 
+mostrarInstrucciones() {
+ this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
+    .setDepth(10);
+  this.TablaSprite.setVisible(true);
 
+    // Grupo de textos para el "Cómo jugar"
+  this.textosInstrucciones = [];
+
+  this.mostrandoInstrucciones = true;
+
+
+  // Título grande
+  this.textosInstrucciones.push(
+    this.add.text(640, 120, '¿Como jugar?', {
+      fontSize: '48px',
+      color: '#00000',
+      fontFamily: 'Comic Neue',
+            fontStyle: 'Bold',
+
+      align: 'center'
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  // Subtítulo
+  this.textosInstrucciones.push(
+    this.add.text(640, 190, 'Controles', {
+      fontSize: '32px',
+      color: '#000000',
+      fontFamily: 'Comic Neue',
+            fontStyle: 'Bold',
+
+      align: 'center'
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  // Controles detallados
+  this.textosInstrucciones.push(
+    this.add.text(640, 280, 'Flechas: Navegacion / Ingresar flechas\nZ: Aceptar / Disparar\nX: Salir', {
+      fontSize: '24px',
+      color: '#000000',
+      fontFamily: 'Comic Neue',
+            fontStyle: 'Bold',
+      fontStyle: 'Bold',
+
+      align: 'center',
+      lineSpacing: 8
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  // Separador
+  this.textosInstrucciones.push(
+    this.add.text(640, 350, '----------------------', {
+      fontSize: '20px',
+      color: '#000000',
+      fontFamily: 'Comic Neue',
+            fontStyle: 'Bold',
+
+      align: 'center'
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  // Mensajes motivacionales
+  this.textosInstrucciones.push(
+    this.add.text(640, 430, 'Trabaja para ganar dinero\nJuega para no quedarte dormido\n¡Que el jefe no te descubra jugando!', {
+      fontSize: '24px',
+      color: '#000000',
+      fontFamily: 'Comic Neue',
+            fontStyle: 'Bold',
+
+      align: 'center',
+      lineSpacing: 10
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  // Frase final
+  this.textosInstrucciones.push(
+    this.add.text(640, 550, 'Intenta hacer la mayor cantidad de dinero\nantes de que te despidan...', {
+      fontSize: '22px',
+      color: '#000000',
+      fontFamily: 'Comic Neue',
+      fontStyle: 'Bold',
+      align: 'center',
+      lineSpacing: 6
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+    // pulsa Z
+  this.textosInstrucciones.push(
+    this.add.text(640, 650, 'Pulsa Z para comenzar', {
+      fontSize: '22px',
+      color: '#000000',
+      fontFamily: 'Comic Neue',
+      fontStyle: 'Bold',
+      align: 'center',
+      lineSpacing: 6
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+}
+
+
+
+  iniciarSubidaDeAburrimientoConElTiempo() {
+  this.time.addEvent({
+    delay: 20000,
+    loop: true,
+    callback: () => {
+      this.aburrimientoTrabajo++;
+      this.aburrimientoMenu++;
+      this.aburrimientoNave++;
+      console.log(`Ahora aburrimiento: Trabajo=${this.aburrimientoTrabajo}, Menu=${this.aburrimientoMenu}, Nave=-${this.aburrimientoNave}`);
+    }
+  });
+}
+ //------------------------
+iniciarTemporizadorJefe() {
+  const delay = Phaser.Math.Between(9000, 30000);
+
+  this.jefeTimer = this.time.delayedCall(delay, () => {
+    if (!this.jefeActivo) {
+      this.aparecerJefe();
+    }
+    // Programar próxima aparición
+    this.iniciarTemporizadorJefe();
+  });
+}
+  // ------------------------
+  ocultarHUD(ocultar) {
+  // Ocultá o mostrá elementos del HUD según corresponda
+  this.puntosTexto.setVisible(!ocultar);
+  this.puntosParcialesTexto.setVisible(!ocultar);
+  this.spriteMultiplicador.setVisible(!ocultar);
+  this.marcoAburrimiento.setVisible(!ocultar);
+  this.barraAburrimiento.setVisible(!ocultar);
+  this.emoji.setVisible(!ocultar);
+  this.contenedor.setVisible(!ocultar);
+  this.signoPesos.setVisible(!ocultar);
+
+}
+// ------------------------
 aparecerJefe() {
-  // Mostrar advertencia
-    this.jefeActivo = true; // ← lo marcamos activo
-  this.jefeTexto.setText('¡El jefe se acerca!');
-  this.jefeTexto.setVisible(true);
+  this.jefeActivo = true;
 
-  // Después de 3 segundos, aparece el jefe
-  this.time.delayedCall(3000, () => {
+  // Ocultar todos por si acaso
+  this.avisoJefeMesa.setVisible(false).stop();
+  this.avisoJefeNoti.setVisible(false).stop();
+  this.avisoJefeSprite.setVisible(false).stop();
+
+  // Elegir uno aleatorio
+  const random = Phaser.Math.Between(1, 3);
+  let spriteElegido = null;
+
+  if (random === 1) {
+    spriteElegido = this.avisoJefeMesa;
+    spriteElegido.play('jefe_mesa_anim');
+  } else if (random === 2) {
+    spriteElegido = this.avisoJefeNoti;
+    spriteElegido.play('jefe_noti_anim');
+  } else {
+    spriteElegido = this.avisoJefeSprite;
+    spriteElegido.play('aviso_jefe_anim');
+  }
+
+  spriteElegido.setVisible(true);
+
+  // Después de 4 segundos, el jefe llega
+  this.time.delayedCall(4000, () => {
     const escenaActual = this.scene.manager.getScenes(true).find(s => s.scene.settings.active && s.scene.key !== 'CerebroScene');
     const nombreEscena = escenaActual?.scene.key || 'ninguna';
 
     if (!nombreEscena) return;
 
-    this.jefeTexto.setText(`El jefe llegó. Estás en: ${nombreEscena}`);
+     // Mostrar el jefe observando, siempre
+  this.JefeViendo.setVisible(true).play('jefe_anim');
 
-    // Enviar evento a la escena activa
 if (nombreEscena === 'TrabajoScene') {
+  // No lanzar de nuevo si ya está activa
   this.scene.get('TrabajoScene').events.emit('jefeObserva');
 } else if (nombreEscena === 'MenuScene') {
-  // El jefe te obliga a volver al trabajo sin decir nada
   this.scene.stop('MenuScene');
   this.scene.launch('TrabajoScene');
-}
-else if (nombreEscena === 'NaveScene') {
+} else if (nombreEscena === 'NaveScene') {
   this.scene.get('NaveScene').events.emit('jefeDetecta');
 }
 
-    this.time.delayedCall(3000, () => {
-      this.jefeTexto.setText('');
-      this.jefeActivo = false; // ← lo marcamos inactivo
+    // Ocultamos la animación del aviso
+      this.jefeActivo = false;
+      spriteElegido.setVisible(false);
     });
-  });
-}
+
+
+  };
 // swimnub_pk <-- fan de breaktime
+
+mostrarPantallaDerrota() {
+  // 1. Frenar escenas activas
+  this.scene.stop('TrabajoScene');
+  this.scene.stop('NaveScene');
+  this.scene.stop('MenuScene');
+
+  // 2. Evitar múltiples pantallas de derrota
+  if (this.derrotaMostrada) return;
+  this.derrotaMostrada = true;
+
+  // 3. Mostrar HUD de derrota
+  this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
+    .setDepth(10);
+
+  this.TablaSprite = this.add.sprite(640, 360, 'TABLA1')
+    .setDepth(20)
+    .setScale(1.8);
+
+  this.textosDerrota = [];
+
+  this.textosDerrota.push(
+    this.add.text(640, 200, '¡DESPEDIDO!', {
+      fontSize: '72px',
+      fontStyle: 'Bold',
+      color: '#a30300',
+      fontFamily: 'Comic Neue'
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  this.textosDerrota.push(
+    this.add.text(640, 310, `Dinero obtenido: $${this.estado.puntos}`, {
+      fontSize: '48px',
+            fontStyle: 'Bold',
+      color: '#398a00',
+      fontFamily: 'Comic Neue'
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  this.textosDerrota.push(
+    this.add.text(640, 430, 'Presioná Z para volver al menú', {
+      fontSize: '32px',
+            fontStyle: 'Bold',
+      color: '#000000',
+      fontFamily: 'Comic Neue'
+    }).setOrigin(0.5).setDepth(21)
+  );
+
+  // 4. Escuchar una sola vez la tecla Z
+this.input.keyboard.once('keydown-Z', () => {
+  // Frenar cualquier escena activa
+  this.scene.stop('TrabajoScene');
+  this.scene.stop('MenuScene');
+  this.scene.stop('NaveScene');
+
+  // Reiniciar CerebroScene por completo
+  this.scene.restart();
+});
 }
 
+
+ocultarInstruccionesYEmpezar() {
+  //this.fondoOscuro.setVisible(false);
+  this.TablaSprite.setVisible(false);
+  this.textosInstrucciones.forEach(texto => texto.destroy());
+this.fondoInstrucciones.destroy();
+this.TablaSprite.setVisible(false);
+
+  this.mostrandoInstrucciones = false;
+
+  // Ahora sí arrancamos el juego
+  this.ocultarHUD(false);
+  this.scene.stop('MenuPrincipalScene');
+  this.scene.launch('MenuScene');
+  this.iniciarTemporizadorJefe();
+  this.iniciarSubidaDeAburrimientoConElTiempo();
+}
+
+
+update() {
+  if (this.mostrandoInstrucciones && Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey('Z'))) {
+    this.ocultarInstruccionesYEmpezar();
+  }
+}
+
+}
 export default CerebroScene;

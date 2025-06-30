@@ -141,20 +141,7 @@ this.add.image(640, 468, 'BarraDeTareas').setOrigin(0.5).setScale(0.88, 1);
   this.teclaX = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
   this.events.on('jefeDetecta', () => {
-  const textoGameOver = this.add.text(400, 300, '¡El jefe te encontró jugando!\nPerdiste.', {
-    fontSize: '32px',
-    color: '#ffffff',
-    backgroundColor: '#000000',
-    align: 'center',
-    fontFamily: 'Arial'
-  }).setOrigin(0.5);
-
-  this.physics.pause();
-  this.input.keyboard.enabled = false;
-
-  this.time.delayedCall(3000, () => {
-    this.scene.start('TrabajoScene'); // o podés crear una escena "GameOver"
-  });
+ this.scene.get('CerebroScene').mostrarPantallaDerrota(this.scene.get('CerebroScene').puntos);
 });
 
 }

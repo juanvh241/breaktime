@@ -59,7 +59,7 @@ this.iconosSprites = this.iconos.map(icono => {
              .play(icono.anim);
 });
     // Indicador de selección
-    this.indicador = this.add.rectangle(this.iconos[0].x, this.iconos[0].y + 80, 100, 10, 0x00ff00);
+    this.indicador = this.add.rectangle(this.iconos[0].x, this.iconos[0].y + 80, 100, 10, 0x000080);
     this.seleccionActual = 0;
 
     // Input de flechas y selección

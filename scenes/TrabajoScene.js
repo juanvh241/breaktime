@@ -121,15 +121,14 @@ this.jefePresente = false;
 this.events.on('jefeObserva', () => {
   this.jefePresente = true;
 
-  const textoJefe = this.add.text(400, 100, '¡El jefe te está observando!', {
+  /*const textoJefe = this.add.text(400, 100, '¡El jefe te está observando!', {
     fontSize: '28px',
     color: '#ffffff',
     backgroundColor: '#aa0000',
     fontFamily: 'Arial'
-  }).setOrigin(0.5);
+  }).setOrigin(0.5);*/
 
   this.time.delayedCall(3000, () => {
-    textoJefe.destroy();
     this.jefePresente = false;
   });
 });
