@@ -943,7 +943,7 @@ mostrarPantallaDerrota() {
   );
 
   this.textosDerrota.push(
-    this.add.text(640, 310, `Dinero obtenido: $${this.estado.puntos}`, {
+    this.add.text(640, 310, `Dinero obtenido:\n $${this.estado.puntos}`, {
       fontSize: '48px',
             fontStyle: 'Bold',
       color: '#398a00',
@@ -952,7 +952,7 @@ mostrarPantallaDerrota() {
   );
 
   this.textosDerrota.push(
-    this.add.text(640, 430, 'Presioná Z para volver al menú', {
+    this.add.text(640, 430, 'Presioná X para volver al menú', {
       fontSize: '32px',
             fontStyle: 'Bold',
       color: '#000000',
