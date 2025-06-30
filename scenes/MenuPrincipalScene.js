@@ -40,7 +40,7 @@ class MenuPrincipalScene extends Phaser.Scene {
     const boton = this.add.sprite(640, 320, 'BOTON_PLAY')
       .play('boton_play_anim')
       .setInteractive()
-      .setScale(0.8)
+      .setScale(1)
       .setOrigin(0.5);
 
     // Alternativa: si no tenés imagen del botón todavía

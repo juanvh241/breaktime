@@ -69,7 +69,7 @@ this.iconosSprites = this.iconos.map(icono => {
     this.inputCooldown = 0; // evitar repetir input por frame
 
 this.events.on('jefeObserva', () => {
-  const textoJefe = this.add.text(400, 100, '¡El jefe te está observando!', {
+  const textoJefe = this.add.text(400, 100, '', {
     fontSize: '28px',
     color: '#ffffff',
     backgroundColor: '#aa0000',
@@ -114,6 +114,7 @@ if (this.cursors.right.isDown && this.seleccionActual < this.iconos.length - 1) 
 if (Phaser.Input.Keyboard.JustDown(this.teclaZ)) {
   const seleccion = this.iconos[this.seleccionActual];
   this.registry.set('ultimoMinijuego', seleccion.escena); // ← muy importante para que recuerde la selección
+  this.sound.play('CLICK', { volume: 0.5 })
   this.scene.stop();
   this.scene.launch(seleccion.escena);
 }

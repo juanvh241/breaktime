@@ -172,6 +172,9 @@ this.anims.create({
       imagen.play(`${tecla.toLowerCase()}_correcta`);
       this.inputIndex++;
 
+      this.sound.play('TECLA1',  { volume: 0.2 })
+        
+
       if (this.inputIndex >= this.secuencia.length) {
         const tiempoFin = this.time.now;
         const tiempoTotal = tiempoFin - this.tiempoInicio;
@@ -223,6 +226,8 @@ this.anims.create({
     // Si se equivoca: aplicar castigo y esperar 800ms antes de reiniciar
     this.aplicarMultiplicadorFinal();
     this.aceptandoInput = false;
+
+      this.sound.play('ERROR', { volume: 0.2 } )
 
     // Mostrar sprite animado de error
     this.feedbackSprite.setVisible(true);

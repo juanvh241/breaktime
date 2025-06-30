@@ -169,12 +169,15 @@ moverEnemigos() {
     bullet.setCollideWorldBounds(false);
     bullet.outOfBoundsKill = true;
     bullet.body.allowGravity = false;
+    this.sound.play('DISPARO', { volume: 0.3 })
     
   }
 
   destruirEnemigo(bala, enemigo) {
     bala.destroy();
     enemigo.destroy();
+
+    this.sound.play('EXPLOSION', { volume: 0.2 })
 
     const cerebro = this.scene.get('CerebroScene');
     cerebro.events.emit('subirAburrimiento', -cerebro.aburrimientoNave);

@@ -62,10 +62,34 @@ preload() {
    this.load.spritesheet('TABLA2', 'public/assets/Cerebro/tabla 2.png', { frameWidth: 371, frameHeight: 480 })
   this.load.spritesheet('TABLA3', 'public/assets/Cerebro/tabla 3.png', { frameWidth: 371, frameHeight: 480 })
  
+  this.load.audio('MUSICA1', 'public/assets/Sonidos/Amazing Plan crushed.wav');
+  this.load.audio('MUSICA2', 'public/assets/Sonidos/Hidden Agenda crushed.wav');
+  this.load.audio('MUSICA3', 'public/assets/Sonidos/Marty Gots a Plan crushed.wav');
+  this.load.audio('MUSICA4', 'public/assets/Sonidos/Scheming Weasel crushed.wav');
+  this.load.audio('BOSTEZO', 'public/assets/Sonidos/bostezo crushed.wav');
+  this.load.audio('DISPARO', 'public/assets/Sonidos/disparo crushed.wav');
+  this.load.audio('ERROR', 'public/assets/Sonidos/error crushed.wav');
+  this.load.audio('EXPLOSION', 'public/assets/Sonidos/explosion crushed.wav');
+  this.load.audio('GENTE', 'public/assets/Sonidos/gente hablando crushed.wav');
+  this.load.audio('GRUÑIDO1', 'public/assets/Sonidos/gruñido 1.wav');
+  this.load.audio('GRUÑIDO2', 'public/assets/Sonidos/gruñido 2.wav');
+  this.load.audio('GRUÑIDO3', 'public/assets/Sonidos/gruñido 3.wav');
+  this.load.audio('GRUÑIDO4', 'public/assets/Sonidos/gruñido 4.wav');
+  this.load.audio('IMPRESORA', 'public/assets/Sonidos/impresora crushed.wav');
+  this.load.audio('CLICK', 'public/assets/Sonidos/mouse click crushed.wav');
+  this.load.audio('MULTI1', 'public/assets/Sonidos/multiplicador x2.wav');
+  this.load.audio('MULTI2', 'public/assets/Sonidos/multiplicador x4.wav');
+  this.load.audio('MULTI3', 'public/assets/Sonidos/multiplicador x6.wav');
+  this.load.audio('NOTI', 'public/assets/Sonidos/notificacion crushed.wav');
+  this.load.audio('TECLA1', 'public/assets/Sonidos/teclado 1.wav');
+  this.load.audio('TECLA2', 'public/assets/Sonidos/teclado 2.wav');
+  this.load.audio('TECLA3', 'public/assets/Sonidos/teclado 3.wav');
+  this.load.audio('TECLA4', 'public/assets/Sonidos/teclado 4.wav');
+  this.load.audio('TELEFONO', 'public/assets/Sonidos/telefono crushed.wav');
 }
 // ─────────────────────────────────────
   create() {
-
+this.ultimoMultiplicador = 1;
    /* this.estado = {
     puntos: 0,
     multiplicador: 1,
@@ -83,6 +107,24 @@ preload() {
   this.mostrandoInstrucciones = false;
   this.derrotaMostrada = false;
 */
+//------------------------------------------
+if (this.musicaFondo) this.musicaFondo.stop();
+if (this.sonidoAmbiente) this.sonidoAmbiente.stop();
+
+    this.sonidoAmbiente = this.sound.add('GENTE', { loop: true, volume: 1.5 });
+this.sonidoAmbiente.play();
+
+// Sonidos ocasionales
+this.time.addEvent({
+  delay: Phaser.Math.Between(8000, 15000),
+  loop: true,
+  callback: () => {
+    const ambiente = Phaser.Math.RND.pick(['IMPRESORA', 'TELEFONO']);
+    this.sound.play(ambiente, { volume: 0.09 });
+  }
+});
+
+//------------------------------------------
   // Si existe el grupo de textos de instrucciones de antes, eliminarlo
   if (this.textosInstrucciones) {
     this.textosInstrucciones.forEach(t => t.destroy());
@@ -394,25 +436,36 @@ this.events.on('actualizarPuntos', (puntos) => {
   }
 });
 
+this.ultimoMultiplicador = 1; // Esto va en create() o constructor
+
 this.events.on('actualizarMultiplicador', ({ multiplicador, puntosParciales, secuenciasCorrectas }) => {
   this.estado.multiplicador = multiplicador;
   this.estado.puntosParciales = puntosParciales;
   this.estado.secuenciasCorrectas = secuenciasCorrectas;
 
-  // Mostrar sprite animado correspondiente
-  if (multiplicador === 2) {
-    this.spriteMultiplicador.setTexture('MULTI_X2').play('multi_x2_anim').setVisible(true);
-    this.puntosParcialesTexto.setColor('#aaff66'); // Verde claro
-  } else if (multiplicador === 4) {
-    this.spriteMultiplicador.setTexture('MULTI_X4').play('multi_x4_anim').setVisible(true);
-    this.puntosParcialesTexto.setColor('#ffff66'); // Amarillo
-  } else if (multiplicador === 6) {
-    this.spriteMultiplicador.setTexture('MULTI_X6').play('multi_x6_anim').setVisible(true);
-    this.puntosParcialesTexto.setColor('#85fff9'); // Celeste
-  } else {
-    this.spriteMultiplicador.setVisible(false);
-    this.puntosParcialesTexto.setColor('#008080'); // Color base (por si vuelve a 1x)
+  // 🔊 Efecto solo si cambia
+  if (multiplicador !== this.ultimoMultiplicador) {
+    if (multiplicador === 2) {
+      this.spriteMultiplicador.setTexture('MULTI_X2').play('multi_x2_anim').setVisible(true);
+      this.puntosParcialesTexto.setColor('#aaff66');
+      this.sound.play('MULTI1', { volume: 0.3 });
+    } else if (multiplicador === 4) {
+      this.spriteMultiplicador.setTexture('MULTI_X4').play('multi_x4_anim').setVisible(true);
+      this.puntosParcialesTexto.setColor('#ffff66');
+      this.sound.play('MULTI2', { volume: 0.3 });
+    } else if (multiplicador === 6) {
+      this.spriteMultiplicador.setTexture('MULTI_X6').play('multi_x6_anim').setVisible(true);
+      this.puntosParcialesTexto.setColor('#85fff9');
+      this.sound.play('MULTI3', { volume: 0.3 });
+    } else {
+      this.spriteMultiplicador.setVisible(false);
+      this.puntosParcialesTexto.setColor('#008080');
+    }
+
+    // ⚠️ Guardamos el nuevo valor
+    this.ultimoMultiplicador = multiplicador;
   }
+
   // Mostrar texto solo si el multiplicador está activo
   if (multiplicador > 1) {
     this.puntosParcialesTexto.setText(`${puntosParciales}`);
@@ -420,6 +473,7 @@ this.events.on('actualizarMultiplicador', ({ multiplicador, puntosParciales, sec
     this.puntosParcialesTexto.setText('');
   }
 });
+
 
 this.events.on('subirAburrimiento', (cantidad) => {
   this.estado.aburrimiento = Phaser.Math.Clamp(this.estado.aburrimiento + cantidad, 0, 100);
@@ -796,6 +850,7 @@ aparecerJefe() {
   } else if (random === 2) {
     spriteElegido = this.avisoJefeNoti;
     spriteElegido.play('jefe_noti_anim');
+    this.sound.play('NOTI', { volume: 0.5 })
   } else {
     spriteElegido = this.avisoJefeSprite;
     spriteElegido.play('aviso_jefe_anim');
@@ -812,6 +867,12 @@ aparecerJefe() {
 
      // Mostrar el jefe observando, siempre
   this.JefeViendo.setVisible(true).play('jefe_anim');
+  const gruñidos = ['GRUÑIDO1', 'GRUÑIDO2', 'GRUÑIDO3', 'GRUÑIDO4'];
+const seleccion_gruñido = Phaser.Math.RND.pick(gruñidos);
+this.gruñido = this.sound.add(seleccion_gruñido, { loop: false, volume: 0.4 });
+this.gruñido.play();
+
+  
 
 if (nombreEscena === 'TrabajoScene') {
   // No lanzar de nuevo si ya está activa
@@ -902,6 +963,7 @@ mostrarPantallaDerrota() {
   // 4. Escuchar una sola vez la tecla Z
 this.input.keyboard.once('keydown-X', () => {
   // Detenemos todas las escenas posibles
+
   this.scene.stop('TrabajoScene');
   this.scene.stop('MenuScene');
   this.scene.stop('MenuPrincipalScene');
@@ -911,11 +973,7 @@ this.aburrimientoTrabajo = 0;
 this.aburrimientoMenu = 0;
 this.aburrimientoNave = 0;
 
-if (this.aburrimientoEvent) {
-  this.aburrimientoEvent.remove();
-  this.aburrimientoEvent = null;
-}
-  // Reiniciamos la escena principal desde 0
+// Reiniciamos la escena principal desde 0
   this.scene.stop('CerebroScene');
   this.scene.start('CerebroScene'); // ← Vuelve a cargar todo como al inicio
 });
@@ -933,17 +991,46 @@ ocultarInstruccionesYEmpezar() {
 
   // Reiniciar aburrimiento antes de empezar
 
-  if (this.aburrimientoEvent) {
-    this.aburrimientoEvent.remove();
-    this.aburrimientoEvent = null;
-  }
+  // Bajar volumen del ambiente
+this.tweens.add({
+  targets: this.sonidoAmbiente,
+  volume: 0.3,
+  duration: 1000
+});
+
+// Reproducir música random
+const canciones = ['MUSICA1', 'MUSICA2', 'MUSICA3', 'MUSICA4'];
+const seleccion = Phaser.Math.RND.pick(canciones);
+this.musicaFondo = this.sound.add(seleccion, { loop: true, volume: 0.4 });
+this.musicaFondo.play();
 
   // Lanzar escenas
   this.scene.stop('MenuPrincipalScene');
   this.scene.launch('MenuScene');
+  
+this.aburrimientoTrabajo = 0;
+this.aburrimientoMenu = 0;
+this.aburrimientoNave = 0;
+this.estado.aburrimiento = 0;
+this.estado.puntos = 0;
 
-  // Iniciar evento solo acá
-  this.iniciarSubidaDeAburrimientoConElTiempo();
+this.aburrimientoTrabajo = 2;
+this.aburrimientoMenu = 1;
+this.aburrimientoNave = 2;
+
+
+//this.actualizarBarraAburrimiento(); // ← que la barra refleje 0
+
+/* Inmediatamente forzamos una subida para que la barra "reviva"
+this.aburrimientoTrabajo++;
+this.aburrimientoMenu++;
+this.aburrimientoNave++;
+*/
+
+//this.actualizarBarraAburrimiento(); // ← ahora sí se va a ver una barra mínima
+
+// Recién después, el evento automático
+this.iniciarSubidaDeAburrimientoConElTiempo();
 
   this.iniciarTemporizadorJefe();
 }
