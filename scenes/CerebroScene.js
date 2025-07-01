@@ -12,88 +12,11 @@ constructor() {
 }
 
 preload() {
-  this.load.spritesheet('MESA_IZQ', 'public/assets/Cerebro/mesa izquierda.png', { frameWidth: 195, frameHeight: 195 });
-  this.load.spritesheet('MESA_MEDIO', 'public/assets/Cerebro/mesa medio.png', { frameWidth: 218, frameHeight: 218 });  // ajustá el ancho si es distinto
-  this.load.spritesheet('MESA_DER', 'public/assets/Cerebro/mesa derecha.png', { frameWidth: 194, frameHeight: 194 }); // suponiendo que es igual a izquierda
-
-  this.load.spritesheet('MONITOR1', 'public/assets/Cerebro/monitor1.png', { frameWidth: 410, frameHeight: 410 });
-  this.load.spritesheet('MONITOR2', 'public/assets/Cerebro/monitor2.png', { frameWidth: 410, frameHeight: 410 });
-
-  this.load.spritesheet('SUELO1', 'public/assets/Cerebro/suelo1.png', { frameWidth: 640, frameHeight: 480 });
-  this.load.spritesheet('SUELO2', 'public/assets/Cerebro/suelo2.png', { frameWidth: 640, frameHeight: 480 });
-
-  this.load.spritesheet('TECHO1', 'public/assets/Cerebro/techo1.png', { frameWidth: 640, frameHeight: 480 });
-  this.load.spritesheet('TECHO2', 'public/assets/Cerebro/techo2.png', { frameWidth: 640, frameHeight: 480 });
-  this.load.spritesheet('TECHO3', 'public/assets/Cerebro/techo3.png', { frameWidth: 640, frameHeight: 480 });
-  this.load.spritesheet('TECHO4', 'public/assets/Cerebro/techo4.png', { frameWidth: 640, frameHeight: 480 });
-  this.load.spritesheet('TECHO5', 'public/assets/Cerebro/techo5.png', { frameWidth: 640, frameHeight: 480 });
-
-  this.load.spritesheet('VENTANA1', 'public/assets/Cerebro/ventana1.png', { frameWidth: 436, frameHeight: 239 });
-  this.load.spritesheet('VENTANA2', 'public/assets/Cerebro/ventana2.png', { frameWidth: 436, frameHeight: 239 });
-
-  this.load.spritesheet('MESA_FONDO_IZQ1', 'public/assets/Cerebro/mesa fondo izq 1.png', { frameWidth: 316, frameHeight: 307 });
-  this.load.spritesheet('MESA_FONDO_IZQ2', 'public/assets/Cerebro/mesa fondo izq 2.png', { frameWidth: 316, frameHeight: 307 });
-
-  this.load.spritesheet('MESA_FONDO_DER1', 'public/assets/Cerebro/mesa fondo derecha 1.png', { frameWidth: 356, frameHeight: 329 });
-  this.load.spritesheet('MESA_FONDO_DER2', 'public/assets/Cerebro/mesa fondo derecha 2.png', { frameWidth: 356, frameHeight: 329 });
-
-  this.load.spritesheet('MARCO_PUNTOS', 'public/assets/Cerebro/marco puntos.png', { frameWidth: 444, frameHeight: 139 });
-
-  this.load.spritesheet('SIGNO_PESOS', 'public/assets/Cerebro/signo pesos.png', { frameWidth: 112, frameHeight: 118 });
-
-  this.load.spritesheet('MULTI_X2', 'public/assets/Cerebro/multi x2.png', { frameWidth: 201, frameHeight: 215 });
-  this.load.spritesheet('MULTI_X4', 'public/assets/Cerebro/multi x4.png', { frameWidth: 188, frameHeight: 208 });
-  this.load.spritesheet('MULTI_X6', 'public/assets/Cerebro/multi x6.png', { frameWidth: 189, frameHeight: 205 });
-
-  this.load.spritesheet('MARCO_ABURRIMIENTO', 'public/assets/Cerebro/barra aburrimiento.png', { frameWidth: 319, frameHeight: 89 });
-  this.load.spritesheet('EMOJI', 'public/assets/Cerebro/emoji.png', { frameWidth: 159, frameHeight: 150 });
-
-  this.load.spritesheet('JEFE_VENTANA', 'public/assets/Cerebro/jefe ventana.png', { frameWidth: 132, frameHeight: 135 });
-  this.load.spritesheet('JEFE_MESA', 'public/assets/Cerebro/jefe mesa.png', { frameWidth: 200, frameHeight: 191 })
-  this.load.spritesheet('JEFE_NOTI', 'public/assets/Cerebro/jefe noti.png', { frameWidth: 274, frameHeight: 120 })
-
-  this.load.spritesheet('JEFE1', 'public/assets/Cerebro/jefe 1.png', { frameWidth: 403, frameHeight: 438 })
-    this.load.spritesheet('JEFE2', 'public/assets/Cerebro/jefe 2.png', { frameWidth: 403, frameHeight: 438 })
-      this.load.spritesheet('JEFE3', 'public/assets/Cerebro/jefe 3.png', { frameWidth: 403, frameHeight: 438 })
-        this.load.spritesheet('JEFE4', 'public/assets/Cerebro/jefe 4.png', { frameWidth: 403, frameHeight: 438 })
-          this.load.spritesheet('JEFE5', 'public/assets/Cerebro/jefe 5.png', { frameWidth: 403, frameHeight: 438 })
- 
-  this.load.spritesheet('TABLA1', 'public/assets/Cerebro/tabla 1.png', { frameWidth: 371, frameHeight: 480 })
-   this.load.spritesheet('TABLA2', 'public/assets/Cerebro/tabla 2.png', { frameWidth: 371, frameHeight: 480 })
-  this.load.spritesheet('TABLA3', 'public/assets/Cerebro/tabla 3.png', { frameWidth: 371, frameHeight: 480 })
- 
-  this.load.spritesheet('CUADRO1', 'public/assets/Cerebro/cuadro 1.png', { frameWidth: 482, frameHeight: 343 });
-  this.load.spritesheet('CUADRO2', 'public/assets/Cerebro/cuadro 2.png', { frameWidth: 482, frameHeight: 343 });
-  this.load.spritesheet('CUADRO3', 'public/assets/Cerebro/cuadro 3.png', { frameWidth: 482, frameHeight: 343 });
-
-  this.load.audio('MUSICA1', 'public/assets/Sonidos/Amazing Plan crushed.wav');
-  this.load.audio('MUSICA2', 'public/assets/Sonidos/Hidden Agenda crushed.wav');
-  this.load.audio('MUSICA3', 'public/assets/Sonidos/Marty Gots a Plan crushed.wav');
-  this.load.audio('MUSICA4', 'public/assets/Sonidos/Scheming Weasel crushed.wav');
-  this.load.audio('BOSTEZO', 'public/assets/Sonidos/bostezo crushed.wav');
-  this.load.audio('DISPARO', 'public/assets/Sonidos/disparo crushed.wav');
-  this.load.audio('ERROR', 'public/assets/Sonidos/error crushed.wav');
-  this.load.audio('EXPLOSION', 'public/assets/Sonidos/explosion crushed.wav');
-  this.load.audio('GENTE', 'public/assets/Sonidos/gente hablando crushed.wav');
-  this.load.audio('GRUÑIDO1', 'public/assets/Sonidos/gruñido 1.wav');
-  this.load.audio('GRUÑIDO2', 'public/assets/Sonidos/gruñido 2.wav');
-  this.load.audio('GRUÑIDO3', 'public/assets/Sonidos/gruñido 3.wav');
-  this.load.audio('GRUÑIDO4', 'public/assets/Sonidos/gruñido 4.wav');
-  this.load.audio('IMPRESORA', 'public/assets/Sonidos/impresora crushed.wav');
-  this.load.audio('CLICK', 'public/assets/Sonidos/mouse click crushed.wav');
-  this.load.audio('MULTI1', 'public/assets/Sonidos/multiplicador x2.wav');
-  this.load.audio('MULTI2', 'public/assets/Sonidos/multiplicador x4.wav');
-  this.load.audio('MULTI3', 'public/assets/Sonidos/multiplicador x6.wav');
-  this.load.audio('NOTI', 'public/assets/Sonidos/notificacion crushed.wav');
-  this.load.audio('TECLA1', 'public/assets/Sonidos/teclado 1.wav');
-  this.load.audio('TECLA2', 'public/assets/Sonidos/teclado 2.wav');
-  this.load.audio('TECLA3', 'public/assets/Sonidos/teclado 3.wav');
-  this.load.audio('TECLA4', 'public/assets/Sonidos/teclado 4.wav');
-  this.load.audio('TELEFONO', 'public/assets/Sonidos/telefono crushed.wav');
-  this.load.audio('HOJAS', 'public/assets/Sonidos/hojas.wav');
 }
 // ─────────────────────────────────────
   create() {
+this.aburrimientoIntervalEvent = null;
+  this.iniciarEmisionDeAburrimiento();
 this.ultimoMultiplicador = 1;
    this.estado = {
     puntos: 0,
@@ -494,6 +417,7 @@ if (this.estado.aburrimiento < 40) {
   this.barraAburrimiento.fillColor = 0xff0000; // rojo
 }
 
+
    if (this.estado.aburrimiento >= 100) {
     this.mostrarPantallaDerrota();
         console.log('se manda la derrota')
@@ -540,39 +464,6 @@ this.jefeTexto = this.add.text(400, 200, '', {
 }).setOrigin(0.5).setDepth(10);
 
 
-
-/*this.time.addEvent({
-  delay: Phaser.Math.Between(8000, 30000), // cada 8 a 30 segundos
- callback: () => {
-    if (!this.jefeActivo) {
-      this.aparecerJefe();
-    }
-  },
-    loop: true // ← IMPORTANTE
-});*/
-// Subida dinámica de aburrimiento según escena activa
-this.time.addEvent({
-  delay: 1500,
-  loop: true,
-  callback: () => {
-    const escenasActivas = this.scene.manager.getScenes(true);
-    const escenaActual = escenasActivas.find(s => s.scene.settings.active && s.scene.key !== 'CerebroScene');
-
-    if (!escenaActual) return;
-
-    let cantidad = 0;
-
-  if (escenaActual.scene.key === 'TrabajoScene') {
-    cantidad = this.aburrimientoTrabajo;
-  } else if (escenaActual.scene.key === 'MenuScene') {
-    cantidad = this.aburrimientoMenu;
-  }
-
-    if (cantidad > 0) {
-      this.events.emit('subirAburrimiento', cantidad);
-    }
-  }
-});
 
 // 1. Crear una forma que represente la pantalla del monitor
 const mascaraPantalla = this.add.rectangle(640, 280, 560, 400, 0x000000)
@@ -685,82 +576,150 @@ const framesTabla3 = this.anims.generateFrameNumbers('TABLA3', { start: 0, end: 
   .setDepth(20) // bien arriba
   .play('tabla_anim');
 //-------------------------------------------------------------
+//cosas del como jugar
+//creo animacion del como jugar
+this.anims.create({
+    key: 'como_jugar_anim',
+    frames: this.anims.generateFrameNumbers('COMOJUGAR', { start: 0, end: 29 }), // N = cantidad de cuadros - 1
+    frameRate: 10,
+    repeat: -1
+  });
+//creo animacion de las flechas
+this.anims.create({
+    key: 'flechas_anim',
+    frames: this.anims.generateFrameNumbers('FLECHAS_INDICADOR', { start: 0, end: 29 }), // N = cantidad de cuadros - 1
+    frameRate: 10,
+    repeat: -1
+  });
+//creo animacion de la tecla Z
+this.anims.create({
+    key: 'z_indicador_anim',
+    frames: this.anims.generateFrameNumbers('Z_INDICADOR', { start: 0, end: 29 }), // N = cantidad de cuadros - 1
+    frameRate: 10,
+    repeat: -1
+  });
+//creo animacion de la tecla X
+this.anims.create({
+    key: 'x_indicador_anim',
+    frames: this.anims.generateFrameNumbers('X_INDICADOR', { start: 0,
+      end: 29 }), // N = cantidad de cuadros - 1
+    frameRate: 10,
+    repeat: -1
+  });
+
+
 // --------------------------------------------------------------------
   // Flag de estado
 this.mostrandoInstrucciones = false;
   }
+//-----------------------------
+  iniciarEmisionDeAburrimiento() {
+  if (this.aburrimientoEmitEvent) {
+    this.aburrimientoEmitEvent.remove();
+    this.aburrimientoEmitEvent = null;
+  }
 
+  this.aburrimientoEmitEvent = this.time.addEvent({
+    delay: 1500,
+    loop: true,
+    callback: () => {
+      const escenasActivas = this.scene.manager.getScenes(true);
+      const escenaActual = escenasActivas.find(s => s.scene.settings.active && s.scene.key !== 'CerebroScene');
+
+      if (!escenaActual) return;
+
+      let cantidad = 0;
+
+      if (escenaActual.scene.key === 'TrabajoScene') {
+        cantidad = this.aburrimientoTrabajo;
+      } else if (escenaActual.scene.key === 'MenuScene') {
+        cantidad = this.aburrimientoMenu;
+      }
+
+      if (cantidad > 0) {
+        this.events.emit('subirAburrimiento', cantidad);
+      }
+    }
+  });
+}
+//-------------------------
 mostrarInstrucciones() {
-  if (this.textosInstrucciones && this.textosInstrucciones.length > 0) return;
-
- this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
+  this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
     .setDepth(10);
+
   this.TablaSprite.setVisible(true);
-
-    // Grupo de textos para el "Cómo jugar"
-  this.textosInstrucciones = [];
-
   this.mostrandoInstrucciones = true;
 
+  this.textosInstrucciones = [];
 
-  // Título grande
+  // SPRITE de título "¿Cómo jugar?"
+  this.spriteTituloInstrucciones = this.add.sprite(640, 150, 'COMOJUGAR')
+  .play('como_jugar_anim')
+    .setOrigin(0.5)
+    .setDepth(21);
+
+  // SPRITE de flechas (movimiento)
+  this.spriteFlechas = this.add.sprite(540, 180, 'FLECHAS_INDICADOR')
+  .play('flechas_anim')
+    .setOrigin(0.5)
+    .setScale(0.8)
+    .setDepth(21);
+
+  // Texto a la derecha de las flechas
   this.textosInstrucciones.push(
-    this.add.text(640, 120, '¿Como jugar?', {
-      fontSize: '48px',
-      color: '#00000',
-      fontFamily: 'Comic Neue',
-            fontStyle: 'Bold',
-
-      align: 'center'
-    }).setOrigin(0.5).setDepth(21)
-  );
-
-  // Subtítulo
-  this.textosInstrucciones.push(
-    this.add.text(640, 190, 'Controles', {
-      fontSize: '32px',
-      color: '#000000',
-      fontFamily: 'Comic Neue',
-            fontStyle: 'Bold',
-
-      align: 'center'
-    }).setOrigin(0.5).setDepth(21)
-  );
-
-  // Controles detallados
-  this.textosInstrucciones.push(
-    this.add.text(640, 280, 'Flechas: Navegacion / Ingresar flechas\nZ: Aceptar / Disparar\nX: Salir', {
+    this.add.text(650, 180, 'Navegación / Ingresar flechas', {
       fontSize: '24px',
-      color: '#000000',
-      fontFamily: 'Comic Neue',
-            fontStyle: 'Bold',
-      fontStyle: 'Bold',
+      color: '#ffffff',
+      fontFamily: 'Arial',
+    }).setOrigin(0, 0.5).setDepth(21)
+  );
 
-      align: 'center',
-      lineSpacing: 8
-    }).setOrigin(0.5).setDepth(21)
+  // SPRITE tecla Z
+  this.spriteZ = this.add.sprite(540, 240, 'Z_KEY')
+    .play('z_indicador_anim')
+    .setOrigin(0.5)
+    .setScale(0.8)
+    .setDepth(21);
+
+  this.textosInstrucciones.push(
+    this.add.text(650, 240, 'Aceptar / Disparar', {
+      fontSize: '24px',
+      color: '#ffffff',
+      fontFamily: 'Arial',
+    }).setOrigin(0, 0.5).setDepth(21)
+  );
+
+  // SPRITE tecla X
+  this.spriteX = this.add.sprite(540, 300, 'X_KEY')
+    .play('x_indicador_anim')
+    .setOrigin(0.5)
+    .setScale(0.8)
+    .setDepth(21);
+
+  this.textosInstrucciones.push(
+    this.add.text(650, 300, 'Salir', {
+      fontSize: '24px',
+      color: '#ffffff',
+      fontFamily: 'Arial',
+    }).setOrigin(0, 0.5).setDepth(21)
   );
 
   // Separador
   this.textosInstrucciones.push(
-    this.add.text(640, 350, '----------------------', {
+    this.add.text(640, 360, '----------------------', {
       fontSize: '20px',
-      color: '#000000',
-      fontFamily: 'Comic Neue',
-            fontStyle: 'Bold',
-
+      color: '#888888',
+      fontFamily: 'Arial',
       align: 'center'
     }).setOrigin(0.5).setDepth(21)
   );
 
   // Mensajes motivacionales
   this.textosInstrucciones.push(
-    this.add.text(640, 430, 'Trabaja para ganar dinero\nJuega para no quedarte dormido\n¡Que el jefe no te descubra jugando!', {
+    this.add.text(640, 400, 'Trabajá para ganar dinero\nJugá para no quedarte dormido\n¡Que el jefe no te descubra jugando!', {
       fontSize: '24px',
-      color: '#000000',
-      fontFamily: 'Comic Neue',
-            fontStyle: 'Bold',
-
+      color: '#ffffff',
+      fontFamily: 'Arial',
       align: 'center',
       lineSpacing: 10
     }).setOrigin(0.5).setDepth(21)
@@ -768,28 +727,14 @@ mostrarInstrucciones() {
 
   // Frase final
   this.textosInstrucciones.push(
-    this.add.text(640, 550, 'Intenta hacer la mayor cantidad de dinero\nantes de que te despidan...', {
+    this.add.text(640, 480, 'Intentá hacer la mayor cantidad de dinero\nantes de que te despidan...', {
       fontSize: '22px',
-      color: '#000000',
-      fontFamily: 'Comic Neue',
-      fontStyle: 'Bold',
+      color: '#ad0c00',
+      fontFamily: 'Patrick Hand',
       align: 'center',
       lineSpacing: 6
     }).setOrigin(0.5).setDepth(21)
   );
-
-    // pulsa Z
-  this.textosInstrucciones.push(
-    this.add.text(640, 650, 'Pulsa Z para comenzar', {
-      fontSize: '22px',
-      color: '#000000',
-      fontFamily: 'Comic Neue',
-      fontStyle: 'Bold',
-      align: 'center',
-      lineSpacing: 6
-    }).setOrigin(0.5).setDepth(21)
-  );
-
 }
 
 
@@ -802,7 +747,7 @@ iniciarSubidaDeAburrimientoConElTiempo() {
   }
 
   this.aburrimientoEvent = this.time.addEvent({
-    delay: 20000,
+    delay: 5000,
     loop: true,
     callback: () => {
       this.aburrimientoTrabajo++;
@@ -987,6 +932,12 @@ mostrarPantallaDerrota() {
     // aca llamas a la funcion para q resetee todo
     this.resetearEstadoInicial();
 
+    if (this.aburrimientoEmitEvent) {
+  this.aburrimientoEmitEvent.remove();
+  this.aburrimientoEmitEvent = null;
+}
+  this.iniciarEmisionDeAburrimiento();
+
     this.scene.stop('CerebroScene');
     this.scene.start('CerebroScene'); 
   });
@@ -1035,6 +986,10 @@ this.aburrimientoNave = 2;
 //this.actualizarBarraAburrimiento(); // ← ahora sí se va a ver una barra mínima
 
 // Recién después, el evento automático
+this.spriteTituloInstrucciones.destroy();
+this.spriteFlechas.destroy();
+this.spriteZ.destroy();
+this.spriteX.destroy();
 
 this.iniciarSubidaDeAburrimientoConElTiempo();
 

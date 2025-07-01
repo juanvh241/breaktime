@@ -7,22 +7,6 @@ class TrabajoScene extends Phaser.Scene {
   // PRELOAD: Cargar assets
   // ─────────────────────────────────────
   preload() {
-    this.load.spritesheet('UP', 'public/assets/Trabajo/Flechas/sprite arriba/sprite arriba.png', { frameWidth: 172, frameHeight: 172 });
-    this.load.spritesheet('DOWN', 'public/assets/Trabajo/Flechas/sprite abajo/sprite abajo.png', { frameWidth: 172, frameHeight: 172 });
-    this.load.spritesheet('LEFT', 'public/assets/Trabajo/Flechas/sprite izq/sprite izq.png', { frameWidth: 172, frameHeight: 172 });
-    this.load.spritesheet('RIGHT', 'public/assets/Trabajo/Flechas/sprite derecha/sprite derecha.png', { frameWidth: 172, frameHeight: 172 });
-
-    this.load.spritesheet('UP_VERDE', 'public/assets/Trabajo/Flechas/arriba verde/arriba verde.png', { frameWidth: 172, frameHeight: 172 });
-    this.load.spritesheet('DOWN_VERDE', 'public/assets/Trabajo/Flechas/abajo verde/abajo verde.png', { frameWidth: 172, frameHeight: 172 });
-    this.load.spritesheet('RIGHT_VERDE', 'public/assets/Trabajo/Flechas/derecha verde/derecha verde.png', { frameWidth: 172, frameHeight: 172 });
-    this.load.spritesheet('LEFT_VERDE', 'public/assets/Trabajo/Flechas/izquierda verde/izquierda verde.png', { frameWidth: 172, frameHeight: 172 });
-
-      
-    this.load.image('BarraDeTareas', 'public/assets/Escritorio/barra de tareas.png');
-  
-    this.load.spritesheet('BORDE_TRABAJO', 'public/assets/Escritorio/borde ventana trabajo.png', { frameWidth: 541, frameHeight: 72 });
-  
-    this.load.spritesheet('VENTANA_ERROR', 'public/assets/Trabajo/ventana error.png', { frameWidth: 354, frameHeight: 129 });
   }
 
   // ─────────────────────────────────────

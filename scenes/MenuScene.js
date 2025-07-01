@@ -4,14 +4,6 @@ class MenuScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('monitorFondo', 'public/assets/MenuIntermedio/MonitorFondo.png');
-    this.load.image('iconoTrabajo', 'public/assets/MenuIntermedio/IconoTrabajo.png');
-    this.load.image('iconoNave', 'public/assets/MenuIntermedio/IconoNave.png');
-  
-    this.load.image('BarraDeTareas' , 'public/assets/Escritorio/barra de tareas.png');
-  
-    this.load.spritesheet('ICONO_TRABAJO', 'public/assets/Escritorio/icono trabajo.png', { frameWidth: 185, frameHeight: 185 });
-    this.load.spritesheet('ICONO_NAVE', 'public/assets/Escritorio/icono nave.png', { frameWidth: 180, frameHeight: 180 });
   }
 
   create() {

@@ -3,6 +3,7 @@ import MenuScene from "./scenes/MenuScene.js";
 import NaveScene from "./scenes/NaveScene.js";
 import TrabajoScene from "./scenes/TrabajoScene.js";
 import MenuPrincipalScene from './scenes/MenuPrincipalScene.js';
+import PreloadScene from "./scenes/PreloadScene.js";
 
 // Create a new Phaser config object
 const config = {
@@ -31,7 +32,7 @@ const config = {
   // List of scenes to load
   // Only the first scene will be shown
   // Remember to import the scene before adding it to the list
-  scene: [CerebroScene, MenuPrincipalScene, MenuScene, TrabajoScene, NaveScene],
+  scene: [PreloadScene, CerebroScene, MenuPrincipalScene, MenuScene, TrabajoScene, NaveScene],
 };
 
 // Create a new Phaser game instance
