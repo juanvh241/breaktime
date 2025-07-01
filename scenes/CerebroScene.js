@@ -62,6 +62,10 @@ preload() {
    this.load.spritesheet('TABLA2', 'public/assets/Cerebro/tabla 2.png', { frameWidth: 371, frameHeight: 480 })
   this.load.spritesheet('TABLA3', 'public/assets/Cerebro/tabla 3.png', { frameWidth: 371, frameHeight: 480 })
  
+  this.load.spritesheet('CUADRO1', 'public/assets/Cerebro/cuadro 1.png', { frameWidth: 482, frameHeight: 343 });
+  this.load.spritesheet('CUADRO2', 'public/assets/Cerebro/cuadro 2.png', { frameWidth: 482, frameHeight: 343 });
+  this.load.spritesheet('CUADRO3', 'public/assets/Cerebro/cuadro 3.png', { frameWidth: 482, frameHeight: 343 });
+
   this.load.audio('MUSICA1', 'public/assets/Sonidos/Amazing Plan crushed.wav');
   this.load.audio('MUSICA2', 'public/assets/Sonidos/Hidden Agenda crushed.wav');
   this.load.audio('MUSICA3', 'public/assets/Sonidos/Marty Gots a Plan crushed.wav');
@@ -86,11 +90,12 @@ preload() {
   this.load.audio('TECLA3', 'public/assets/Sonidos/teclado 3.wav');
   this.load.audio('TECLA4', 'public/assets/Sonidos/teclado 4.wav');
   this.load.audio('TELEFONO', 'public/assets/Sonidos/telefono crushed.wav');
+  this.load.audio('HOJAS', 'public/assets/Sonidos/hojas.wav');
 }
 // ─────────────────────────────────────
   create() {
 this.ultimoMultiplicador = 1;
-   /* this.estado = {
+   this.estado = {
     puntos: 0,
     multiplicador: 1,
     puntosParciales: 0,
@@ -98,7 +103,7 @@ this.ultimoMultiplicador = 1;
     secuenciasCorrectas: 0
   };
 
-*/
+
 //------------------------------------------
 if (this.musicaFondo) this.musicaFondo.stop();
 if (this.sonidoAmbiente) this.sonidoAmbiente.stop();
@@ -234,7 +239,23 @@ const ventana = this.add.sprite(120, 290, 'VENTANA1')
   .setDepth(-2) // Ajustá según cómo lo quieras apilar
   .setScale(1); // O el valor que veas mejor
 
-
+    // -------------------------------------
+  // creo animacion del cuadro
+const framesCuadro1 = this.anims.generateFrameNumbers('CUADRO1', { start: 0, end: 8 });
+const framesCuadro2 = this.anims.generateFrameNumbers('CUADRO2', { start: 0, end: 8 });
+const framesCuadro3 = this.anims.generateFrameNumbers('CUADRO3', { start: 0, end: 8 });
+this.anims.create({
+  key: 'cuadro_anim',
+  frames: [...framesCuadro1, ...framesCuadro2, ...framesCuadro3],
+  frameRate: 10,
+  repeat: -1
+});
+// cuadro 
+const cuadro = this.add.sprite(1060, 250, 'CUADRO1')
+  .play('cuadro_anim')
+  .setDepth(-1) // Ajustá según cómo lo quieras apilar
+  .setScale(0.3); // O el valor que veas mejor
+cuadro.setAlpha(0.8); // Ajustá la opacidad si es necesario
 
     // ─────────────────────────────────────
     // MESA FONDO IZQUIERDA animacion
@@ -427,15 +448,15 @@ this.events.on('actualizarMultiplicador', ({ multiplicador, puntosParciales, sec
     if (multiplicador === 2) {
       this.spriteMultiplicador.setTexture('MULTI_X2').play('multi_x2_anim').setVisible(true);
       this.puntosParcialesTexto.setColor('#aaff66');
-      this.sound.play('MULTI1', { volume: 0.3 });
+      this.sound.play('MULTI1', { volume: 0.2 });
     } else if (multiplicador === 4) {
       this.spriteMultiplicador.setTexture('MULTI_X4').play('multi_x4_anim').setVisible(true);
       this.puntosParcialesTexto.setColor('#ffff66');
-      this.sound.play('MULTI2', { volume: 0.3 });
+      this.sound.play('MULTI2', { volume: 0.2 });
     } else if (multiplicador === 6) {
       this.spriteMultiplicador.setTexture('MULTI_X6').play('multi_x6_anim').setVisible(true);
       this.puntosParcialesTexto.setColor('#85fff9');
-      this.sound.play('MULTI3', { volume: 0.3 });
+      this.sound.play('MULTI3', { volume: 0.2 });
     } else {
       this.spriteMultiplicador.setVisible(false);
       this.puntosParcialesTexto.setColor('#008080');
@@ -519,9 +540,6 @@ this.jefeTexto = this.add.text(400, 200, '', {
 }).setOrigin(0.5).setDepth(10);
 
 
-this.aburrimientoTrabajo = 2;
-this.aburrimientoMenu = 1;
-this.aburrimientoNave = 2;
 
 /*this.time.addEvent({
   delay: Phaser.Math.Between(8000, 30000), // cada 8 a 30 segundos
@@ -784,7 +802,7 @@ iniciarSubidaDeAburrimientoConElTiempo() {
   }
 
   this.aburrimientoEvent = this.time.addEvent({
-    delay: 5000,
+    delay: 20000,
     loop: true,
     callback: () => {
       this.aburrimientoTrabajo++;
@@ -868,6 +886,10 @@ if (nombreEscena === 'TrabajoScene') {
 } else if (nombreEscena === 'MenuScene') {
   this.scene.stop('MenuScene');
   this.scene.launch('TrabajoScene');
+   // ⚠️ Esperar a que se cree TrabajoScene antes de emitir
+  this.scene.get('TrabajoScene').events.once('create', () => {
+    this.scene.get('TrabajoScene').events.emit('jefeObserva');
+  });
 } else if (nombreEscena === 'NaveScene') {
   this.scene.get('NaveScene').events.emit('jefeDetecta');
 }
@@ -889,14 +911,26 @@ resetearEstadoInicial() {
     aburrimiento: 0,
     secuenciasCorrectas: 0
   };
+  console.log(`Aburrimiento tras reinicio: Trabajo=${this.aburrimientoTrabajo}, Menu=${this.aburrimientoMenu}, Nave=${this.aburrimientoNave}`);
 
+  // Reiniciar valores específicos de aburrimiento en escenas
+  this.aburrimientoTrabajo = 0;
+  this.aburrimientoMenu = 0;
+  this.aburrimientoNave = 0;
 
   // Reiniciar flags de estados
   this.jefeActivo = false;
   this.derrotaMostrada = false;
   this.mostrandoInstrucciones = false;
-}
 
+   // Actualizas la barra de aburrimiento visualmente
+  if (this.barraAburrimiento) {
+    this.barraAburrimiento.setSize(this.barraAburrimientoMax, 20);
+    this.barraAburrimiento.displayWidth = this.barraAburrimientoMax;
+    this.barraAburrimiento.x = this.barraAburrimientoX;
+    this.barraAburrimiento.fillColor = 0x00ff00;
+  }
+}
 mostrarPantallaDerrota() {
   // 1. Frenar escenas activas
   this.scene.stop('TrabajoScene');
@@ -944,21 +978,18 @@ mostrarPantallaDerrota() {
     }).setOrigin(0.5).setDepth(21)
   );
 
-  // 4. Escuchar una sola vez la tecla Z
-this.input.keyboard.once('keydown-X', () => {
-  // Detenemos todas las escenas posibles
+ this.input.keyboard.once('keydown-X', () => {
+    this.scene.stop('TrabajoScene');
+    this.scene.stop('MenuScene');
+    this.scene.stop('MenuPrincipalScene');
+    this.scene.stop('NaveScene');
 
-  this.scene.stop('TrabajoScene');
-  this.scene.stop('MenuScene');
-  this.scene.stop('MenuPrincipalScene');
-  this.scene.stop('NaveScene');
+    // aca llamas a la funcion para q resetee todo
+    this.resetearEstadoInicial();
 
-this.resetearEstadoInicial();
-
-// Reiniciamos la escena principal desde 0
-  this.scene.stop('CerebroScene');
-  this.scene.start('CerebroScene'); // ← Vuelve a cargar todo como al inicio
-});
+    this.scene.stop('CerebroScene');
+    this.scene.start('CerebroScene'); 
+  });
 }
 
 

@@ -94,12 +94,7 @@ this.add.image(640, 468, 'BarraDeTareas').setOrigin(0.5).setScale(0.88, 1);
       this.imagenesFlechas.push(img);
     });
 
-    // Texto de feedback (¡Correcto!, ¡Error!, etc.)
-    this.feedback = this.add.text(100, 350, '', {
-      fontSize: '30px',
-      fill: '#ffffff',
-      fontFamily: 'Arial',
-    });
+    
 
 
     // Configurar inputs
@@ -120,14 +115,6 @@ this.jefePresente = false;
 
 this.events.on('jefeObserva', () => {
   this.jefePresente = true;
-
-  /*const textoJefe = this.add.text(400, 100, '¡El jefe te está observando!', {
-    fontSize: '28px',
-    color: '#ffffff',
-    backgroundColor: '#aa0000',
-    fontFamily: 'Arial'
-  }).setOrigin(0.5);*/
-
   this.time.delayedCall(3000, () => {
     this.jefePresente = false;
   });
@@ -181,11 +168,9 @@ this.anims.create({
 
       if (this.multiplicador > 1 && tiempoTotal > 3000) {          
         this.aplicarMultiplicadorFinal(); // Corta el combo
-        this.feedback.setText('¡Tardaste demasiado!');
         this.aceptandoInput = false;
 
         this.time.delayedCall(800, () => {
-          this.feedback.setText('');
           this.aceptandoInput = true; // Reactivamos el input sin reiniciar la secuencia
           this.tiempoInicio = this.time.now; // Reinicia el tiempo para la misma secuencia
         });
@@ -218,9 +203,7 @@ this.anims.create({
         });
 
         this.aceptandoInput = false;
-        this.feedback.setText('¡Correcto!');
         this.time.delayedCall(100, () => this.reiniciarMinijuego(true));
-        this.time.delayedCall(800, () => this.feedback.setText(''));
       }
     } else {
     // Si se equivoca: aplicar castigo y esperar 800ms antes de reiniciar
@@ -261,11 +244,9 @@ if (this.multiplicador > 1) {
   this.limiteTiempo = this.time.delayedCall(3000, () => {
     if (this.inputIndex < this.secuencia.length) {
       this.aplicarMultiplicadorFinal();
-      this.feedback.setText('¡Tardaste demasiado!');
       this.aceptandoInput = false;
       this.tiempoInicio = this.time.now; // reinicia tiempo pero no secuencia
       this.time.delayedCall(800, () => {
-        this.feedback.setText('');
         this.aceptandoInput = true;
       });
     }
