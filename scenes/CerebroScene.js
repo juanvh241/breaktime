@@ -26,7 +26,7 @@ this.ultimoMultiplicador = 1;
     secuenciasCorrectas: 0
   };
 
-
+this.add.text(20, 20, 'Prueba', { fontSize: '24px', fill: '#fff' }).setDepth(-20).fontFamily = 'Patrick Hand';
 //------------------------------------------
 if (this.musicaFondo) this.musicaFondo.stop();
 if (this.sonidoAmbiente) this.sonidoAmbiente.stop();
@@ -606,6 +606,20 @@ this.anims.create({
     frameRate: 10,
     repeat: -1
   });
+//ANIMACION DEL DESPEDIDO
+this.anims.create({
+    key: 'despedido_anim',
+    frames: this.anims.generateFrameNumbers('DESPEDIDO', { start: 0, end: 29 }), // N = cantidad de cuadros - 1
+    frameRate: 10,
+    repeat: -1
+  });
+  //animacion del dinero obtenido
+this.anims.create({
+    key: 'dinero_obtenido_anim',
+    frames: this.anims.generateFrameNumbers('DINERO_OBTENIDO', { start: 0, end: 29 }), // N = cantidad de cuadros - 1
+    frameRate: 10,
+    repeat: -1
+  });
 
 
 // --------------------------------------------------------------------
@@ -644,95 +658,91 @@ this.mostrandoInstrucciones = false;
 }
 //-------------------------
 mostrarInstrucciones() {
-  this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
-    .setDepth(10);
+  // Evitar que se cree dos veces
+  if (this.mostrandoInstrucciones) return;
 
-  this.TablaSprite.setVisible(true);
   this.mostrandoInstrucciones = true;
 
+  // Crear fondo oscuro
+  this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6).setDepth(10);
+
+  // Mostrar tabla
+  this.TablaSprite.setVisible(true);
+
+  // Crear sprites y textos
   this.textosInstrucciones = [];
 
-  // SPRITE de título "¿Cómo jugar?"
-  this.spriteTituloInstrucciones = this.add.sprite(640, 150, 'COMOJUGAR')
-  .play('como_jugar_anim')
+  this.spriteTituloInstrucciones = this.add.sprite(640, 140, 'COMOJUGAR')
+    .play('como_jugar_anim')
     .setOrigin(0.5)
     .setDepth(21);
 
-  // SPRITE de flechas (movimiento)
-  this.spriteFlechas = this.add.sprite(540, 180, 'FLECHAS_INDICADOR')
-  .play('flechas_anim')
+  this.spriteFlechas = this.add.sprite(640, 220, 'FLECHAS_INDICADOR')
+    .play('flechas_anim')
     .setOrigin(0.5)
     .setScale(0.8)
     .setDepth(21);
 
-  // Texto a la derecha de las flechas
-  this.textosInstrucciones.push(
-    this.add.text(650, 180, 'Navegación / Ingresar flechas', {
-      fontSize: '24px',
-      color: '#ffffff',
-      fontFamily: 'Arial',
-    }).setOrigin(0, 0.5).setDepth(21)
-  );
-
-  // SPRITE tecla Z
-  this.spriteZ = this.add.sprite(540, 240, 'Z_KEY')
+  this.spriteZ = this.add.sprite(550, 330, 'Z_KEY')
     .play('z_indicador_anim')
     .setOrigin(0.5)
     .setScale(0.8)
     .setDepth(21);
 
-  this.textosInstrucciones.push(
-    this.add.text(650, 240, 'Aceptar / Disparar', {
-      fontSize: '24px',
-      color: '#ffffff',
-      fontFamily: 'Arial',
-    }).setOrigin(0, 0.5).setDepth(21)
-  );
-
-  // SPRITE tecla X
-  this.spriteX = this.add.sprite(540, 300, 'X_KEY')
+  this.spriteX = this.add.sprite(730, 330, 'X_KEY')
     .play('x_indicador_anim')
     .setOrigin(0.5)
     .setScale(0.8)
     .setDepth(21);
 
   this.textosInstrucciones.push(
-    this.add.text(650, 300, 'Salir', {
+    this.add.text(520, 270, 'Navegación / Ingresar flechas', {
       fontSize: '24px',
-      color: '#ffffff',
-      fontFamily: 'Arial',
-    }).setOrigin(0, 0.5).setDepth(21)
-  );
+      color: '#000000',
+      fontFamily: 'Patrick Hand',
+    }).setOrigin(0, 0.5).setDepth(21),
 
-  // Separador
-  this.textosInstrucciones.push(
-    this.add.text(640, 360, '----------------------', {
+    this.add.text(470, 370, 'Aceptar / Disparar', {
+      fontSize: '24px',
+      color: '#000000',
+      fontFamily: 'Patrick Hand',
+    }).setOrigin(0, 0.5).setDepth(21),
+
+    this.add.text(710, 370, 'Salir', {
+      fontSize: '24px',
+      color: '#000000',
+      fontFamily: 'Patrick Hand',
+    }).setOrigin(0, 0.5).setDepth(21),
+
+    this.add.text(640, 400, '-------------------------', {
       fontSize: '20px',
       color: '#888888',
       fontFamily: 'Arial',
       align: 'center'
-    }).setOrigin(0.5).setDepth(21)
-  );
+    }).setOrigin(0.5).setDepth(21),
 
-  // Mensajes motivacionales
-  this.textosInstrucciones.push(
-    this.add.text(640, 400, 'Trabajá para ganar dinero\nJugá para no quedarte dormido\n¡Que el jefe no te descubra jugando!', {
-      fontSize: '24px',
-      color: '#ffffff',
-      fontFamily: 'Arial',
+    this.add.text(630, 470, '- Trabajá para ganar dinero\n- Jugá para no quedarte dormido\n- ¡Que el jefe no te descubra jugando!', {
+      fontSize: '26px',
+      color: '#000000',
+      fontFamily: 'Patrick Hand',
       align: 'center',
       lineSpacing: 10
-    }).setOrigin(0.5).setDepth(21)
-  );
+    }).setOrigin(0.5).setDepth(21),
 
-  // Frase final
-  this.textosInstrucciones.push(
-    this.add.text(640, 480, 'Intentá hacer la mayor cantidad de dinero\nantes de que te despidan...', {
-      fontSize: '22px',
+    this.add.text(640, 570, 'Intentá hacer la mayor cantidad de \ndinero antes de que te despidan...', {
+      fontSize: '26px',
       color: '#ad0c00',
       fontFamily: 'Patrick Hand',
       align: 'center',
       lineSpacing: 6
+    }).setOrigin(0.5).setDepth(21),
+
+    this.add.text(640, 640, 'Pulsa Z para comenzar', {
+      fontSize: '24px',
+      color: '#3b3b3b',
+      fontFamily: 'Patrick Hand',
+      align: 'center',
+      lineSpacing: 10
     }).setOrigin(0.5).setDepth(21)
   );
 }
@@ -747,7 +757,7 @@ iniciarSubidaDeAburrimientoConElTiempo() {
   }
 
   this.aburrimientoEvent = this.time.addEvent({
-    delay: 5000,
+    delay: 20000,
     loop: true,
     callback: () => {
       this.aburrimientoTrabajo++;
@@ -886,6 +896,7 @@ mostrarPantallaDerrota() {
   if (this.derrotaMostrada) return;
   this.derrotaMostrada = true;
 
+  this.sound.play('TROMPETA', { volume: 0.5 });
   // 3. Mostrar HUD de derrota
   this.fondoInstrucciones = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.6)
     .setDepth(10);
@@ -894,49 +905,55 @@ mostrarPantallaDerrota() {
     .setDepth(20)
     .setScale(1.8);
 
+  // Sprite de “DESPEDIDO”
+  this.spriteDespedido = this.add.sprite(640, 180, 'DESPEDIDO')
+    .play('despedido_anim')
+    .setScale(1)
+    .setOrigin(0.5)
+    .setDepth(21);
+
+  // Sprite de “Dinero obtenido”
+  this.spriteDinero = this.add.sprite(640, 340, 'DINERO_TEXTO')
+  .play('dinero_obtenido_anim')
+    .setScale(0.9)
+    .setOrigin(0.5)
+    .setDepth(21);
+
+  // Texto con el monto de dinero
   this.textosDerrota = [];
 
   this.textosDerrota.push(
-    this.add.text(640, 200, '¡DESPEDIDO!', {
-      fontSize: '72px',
-      fontStyle: 'Bold',
-      color: '#a30300',
-      fontFamily: 'Comic Neue'
-    }).setOrigin(0.5).setDepth(21)
-  );
-
-  this.textosDerrota.push(
-    this.add.text(640, 310, `Dinero obtenido:\n $${this.estado.puntos}`, {
+    this.add.text(640, 400, `$${this.estado.puntos}`, {
       fontSize: '48px',
-            fontStyle: 'Bold',
+      fontStyle: 'Bold',
       color: '#398a00',
       fontFamily: 'Comic Neue'
     }).setOrigin(0.5).setDepth(21)
   );
 
   this.textosDerrota.push(
-    this.add.text(640, 430, 'Presioná X para volver al menú', {
-      fontSize: '32px',
-            fontStyle: 'Bold',
+    this.add.text(640, 550, 'Presiona X para volver al menú', {
+      fontSize: '26px',
+      fontStyle: 'Bold',
       color: '#000000',
       fontFamily: 'Comic Neue'
     }).setOrigin(0.5).setDepth(21)
   );
 
- this.input.keyboard.once('keydown-X', () => {
+  // ▶️ Volver al menú al apretar X
+  this.input.keyboard.once('keydown-X', () => {
     this.scene.stop('TrabajoScene');
     this.scene.stop('MenuScene');
     this.scene.stop('MenuPrincipalScene');
     this.scene.stop('NaveScene');
 
-    // aca llamas a la funcion para q resetee todo
     this.resetearEstadoInicial();
 
     if (this.aburrimientoEmitEvent) {
-  this.aburrimientoEmitEvent.remove();
-  this.aburrimientoEmitEvent = null;
-}
-  this.iniciarEmisionDeAburrimiento();
+      this.aburrimientoEmitEvent.remove();
+      this.aburrimientoEmitEvent = null;
+    }
+    this.iniciarEmisionDeAburrimiento();
 
     this.scene.stop('CerebroScene');
     this.scene.start('CerebroScene'); 

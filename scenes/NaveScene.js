@@ -4,12 +4,6 @@ class NaveScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet('balita', 'public/assets/Nave/balita.png', { frameWidth: 27, frameHeight: 27 })
-    this.load.spritesheet('cuadradito', 'public/assets/Nave/cuadradito.png', { frameWidth: 64, frameHeight: 64 })
-    this.load.spritesheet('nave', 'public/assets/Nave/nave.png', { frameWidth: 93, frameHeight: 93 })
-
-   this.load.image('BarraDeTareas', 'public/assets/Escritorio/barra de tareas.png');
-    this.load.spritesheet('BORDE_NAVE', 'public/assets/Escritorio/borde ventana nave.png', { frameWidth: 562, frameHeight: 54 });
 
   }
 

@@ -131,7 +131,11 @@ class PreloadScene extends Phaser.Scene {
   this.load.spritesheet('X_INDICADOR', 'public/assets/Cerebro/x indicador.png', { frameWidth: 63, frameHeight: 60 });
   this.load.spritesheet('FLECHAS_INDICADOR', 'public/assets/Cerebro/flechas indicador.png', { frameWidth: 148, frameHeight: 99 });
 
-    //navescene
+  this.load.spritesheet('DESPEDIDO', 'public/assets/Cerebro/despedido.png', { frameWidth: 474, frameHeight: 129 });
+  this.load.spritesheet('DINERO_OBTENIDO', 'public/assets/Cerebro/dinero obtenido.png', { frameWidth: 455, frameHeight: 92 });
+   
+  this.load.audio('TROMPETA', 'public/assets/Sonidos/trompeta sad crushed.wav');
+  //navescene
     this.load.spritesheet('balita', 'public/assets/Nave/balita.png', { frameWidth: 27, frameHeight: 27 })
     this.load.spritesheet('cuadradito', 'public/assets/Nave/cuadradito.png', { frameWidth: 64, frameHeight: 64 })
     this.load.spritesheet('nave', 'public/assets/Nave/nave.png', { frameWidth: 93, frameHeight: 93 })
@@ -174,7 +178,9 @@ class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start('CerebroScene');
+document.fonts.ready.then(() => {
+  this.scene.start('CerebroScene');
+});
   }
 }
 export default PreloadScene;
