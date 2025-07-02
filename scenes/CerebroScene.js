@@ -932,7 +932,7 @@ mostrarPantallaDerrota() {
   );
 
   this.textosDerrota.push(
-    this.add.text(640, 550, 'Presiona X para volver al menú', {
+    this.add.text(640, 550, 'Presiona ESPACIO para volver al menú', {
       fontSize: '26px',
       fontStyle: 'Bold',
       color: '#000000',
@@ -940,8 +940,8 @@ mostrarPantallaDerrota() {
     }).setOrigin(0.5).setDepth(21)
   );
 
-  // ▶️ Volver al menú al apretar X
-  this.input.keyboard.once('keydown-X', () => {
+  // Volver al menú al apretar X
+  this.input.keyboard.once('keydown-SPACE', () => {
     this.scene.stop('TrabajoScene');
     this.scene.stop('MenuScene');
     this.scene.stop('MenuPrincipalScene');
